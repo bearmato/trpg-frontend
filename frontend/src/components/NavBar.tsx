@@ -46,7 +46,7 @@ const NavBar = () => {
       <div className="navbar-end">
         <ThemeButton />
         <button className="btn btn-ghost btn-circle">
-          <div className="indicator">
+          <div className="UserLogIn">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
