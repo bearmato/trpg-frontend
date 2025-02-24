@@ -33,7 +33,10 @@ const HomePageMenuButton = () => {
           <a>AI GM</a>
         </li>
         <li>
-          <a>Role Craft</a>
+          <a>Create a Character</a>
+        </li>
+        <li>
+          <a>Roll a Dice</a>
         </li>
       </ul>
     </div>
