@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import HomePageMenuButton from "./HomePageMenuButton";
 import LoginButton from "./LoginButton";
 import NavBarTitle from "./NavBarTitle";
@@ -10,7 +11,9 @@ const NavBar = () => {
         <HomePageMenuButton />
       </div>
       <div className="navbar-center">
-        <NavBarTitle />
+        <Link to={"/"}>
+          <NavBarTitle />
+        </Link>
       </div>
       <div className="navbar-end">
         <ThemeButton />

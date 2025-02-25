@@ -1,5 +1,7 @@
 //import React from 'react'
 
+import { Link } from "react-router-dom";
+
 const HomePageMenuButton = () => {
   return (
     <div className="dropdown">
@@ -24,16 +26,16 @@ const HomePageMenuButton = () => {
         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
       >
         <li>
-          <a>Homepage</a>
+          <Link to="/">Homepage</Link>
         </li>
         <li>
-          <a>Rules</a>
+          <Link to="/rules">Rules</Link>
         </li>
         <li>
-          <a>AI GM</a>
+          <Link to="/ai-gm">AI GM</Link>
         </li>
         <li>
-          <a>Create a Character</a>
+          <Link to="/character-creation">Create a Character</Link>
         </li>
         <li>
           <a>Roll a Dice</a>

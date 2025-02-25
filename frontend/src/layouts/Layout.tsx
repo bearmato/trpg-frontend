@@ -5,7 +5,7 @@ const Layout = () => {
   return (
     <div>
       <Navbar />
-      <main className="container mx-auto p-4">
+      <main className="flex-grow ">
         <Outlet /> {/* 这里渲染当前页面内容 */}
       </main>
     </div>
