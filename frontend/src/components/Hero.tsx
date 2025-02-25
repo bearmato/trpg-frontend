@@ -8,7 +8,7 @@ const Hero = () => {
   return (
     <div
       className="hero min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url(${bgImage})` }} // 替换为你的背景图片路径
+      style={{ backgroundImage: `url(${bgImage})` }} // 背景图片路径
     >
       <div className="hero-overlay bg-opacity-50"></div> {/*半透明遮罩 */}
       <div className="hero-content text-center text-neutral-content">
