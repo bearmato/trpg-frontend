@@ -16,9 +16,7 @@ const Hero = () => {
           <h1 className="text-5xl font-bold text-white">
             Everything For Your Adventures
           </h1>
-          <p className="py-6 text-lg">
-            Create and Play Free Unlimited Characters
-          </p>
+          <p className="py-6 text-lg">Create Free Characters</p>
           <button className="btn btn-primary bg-pink-500 border-none text-white px-6 py-3 rounded-lg">
             Create a Character Now
           </button>

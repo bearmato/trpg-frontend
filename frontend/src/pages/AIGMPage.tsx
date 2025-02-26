@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import { sendMessageToAIGM } from "../api/aigm"; // 引入 API 封装
 
 const AIGMPage = () => {
   const [messages, setMessages] = useState<{ role: string; text: string }[]>(
@@ -14,11 +14,9 @@ const AIGMPage = () => {
     setMessages(newMessages);
 
     try {
-      const response = await axios.post("http://localhost:8000/api/chat/", {
-        message: input,
-      });
+      const aiReply = await sendMessageToAIGM(input); // 调用封装的 API
 
-      setMessages([...newMessages, { role: "gm", text: response.data.reply }]);
+      setMessages([...newMessages, { role: "gm", text: aiReply }]);
     } catch (error) {
       console.error("Error sending message:", error);
     }

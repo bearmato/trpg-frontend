@@ -6,7 +6,7 @@ import ThemeButton from "./ThemeButton";
 
 const NavBar = () => {
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-100 ">
       <div className="navbar-start">
         <HomePageMenuButton />
       </div>
