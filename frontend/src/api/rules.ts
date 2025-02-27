@@ -1,19 +1,23 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://127.0.0.1:8000/api";
+const API_BASE_URL = "http://localhost:8000/api/rules";
 
-/**
- * 获取指定类别的规则列表
- */
 export const getRules = async (category: string) => {
-  const response = await axios.get(`${API_BASE_URL}/rules/${category}/`);
-  return response.data;
+  try {
+    const response = await axios.get(`${API_BASE_URL}/${category}/`);
+    return response.data;
+  } catch (error) {
+    console.error("❌ 获取规则失败:", error);
+    return [];
+  }
 };
 
-/**
- * 获取单个规则详情
- */
-export const getRuleDetail = async (category: string, ruleName: string) => {
-  const response = await axios.get(`${API_BASE_URL}/rules/${category}/${ruleName}/`);
-  return response.data;
+export const getRuleDetail = async (category: string, index: string) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/${category}/${index}/`);
+    return response.data;
+  } catch (error) {
+    console.error("❌ 获取规则详情失败:", error);
+    return null;
+  }
 };

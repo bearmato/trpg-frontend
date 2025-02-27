@@ -1,44 +1,58 @@
 import { useState, useEffect } from "react";
-import { getRules } from "../api/rules";
-import { Link } from "react-router-dom";
+import { getRules, getRuleDetail } from "../api/rules"; // ✅ API 请求
+import SideBarRules from "../components/SideBarRules"; // ✅ 侧边栏
+import RulesDetailPage from "../pages/RulesDetailPage"; // ✅ 详情页面
 
 const categories = ["spells", "monsters", "equipment", "classes", "races"];
 
 const RulesPage = () => {
-  const [category, setCategory] = useState("spells");
+  const [category, setCategory] = useState<string | null>(null); // ✅ 允许 null
   const [rules, setRules] = useState<{ index: string; name: string }[]>([]);
+  const [selectedRule, setSelectedRule] = useState<{
+    name: string;
+    desc: string;
+  } | null>(null);
 
   useEffect(() => {
-    getRules(category).then((data) => setRules(data.results || []));
+    if (category) {
+      getRules(category).then((data) => {
+        console.log(`📌 获取到 ${category} 数据:`, data);
+        setRules(data.results || []);
+      });
+    }
   }, [category]);
 
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">规则查询</h1>
-      <div className="tabs">
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            className={`tab ${category === cat ? "tab-active" : ""}`}
-            onClick={() => setCategory(cat)}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
+  const handleRuleClick = (ruleIndex: string) => {
+    if (category) {
+      getRuleDetail(category, ruleIndex).then((data) => {
+        console.log(`📌 规则详情(${ruleIndex}):`, data);
+        setSelectedRule({
+          name: data.name,
+          desc: data.desc?.join("\n\n") || "暂无描述",
+        });
+      });
+    }
+  };
 
-      <ul className="mt-4">
-        {rules.map((rule) => (
-          <li key={rule.index} className="p-2 border-b">
-            <Link
-              to={`/rules/${category}/${rule.index}`}
-              className="text-blue-500"
-            >
-              {rule.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
+  return (
+    <div className="flex h-screen">
+      {/* 侧边栏 */}
+      <SideBarRules
+        categories={categories}
+        selectedCategory={category}
+        setCategory={setCategory} // ✅ 传递允许 null 的 setCategory
+        rules={rules}
+        onRuleClick={handleRuleClick}
+      />
+
+      {/* 规则详情 */}
+      <div className="flex-1 p-6 overflow-auto">
+        {selectedRule ? (
+          <RulesDetailPage rule={selectedRule} />
+        ) : (
+          <p className="text-center text-gray-500">🔍 请选择一个规则查看详情</p>
+        )}
+      </div>
     </div>
   );
 };

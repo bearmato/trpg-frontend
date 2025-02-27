@@ -1,32 +1,18 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getRuleDetail } from "../api/rules";
+import ReactMarkdown from "react-markdown";
 
-const RuleDetailPage = () => {
-  const { category, ruleName } = useParams<{
-    category: string;
-    ruleName: string;
-  }>();
-  const [rule, setRule] = useState<{ name: string; desc: string[] } | null>(
-    null
-  );
+interface RulesDetailPageProps {
+  rule: { name: string; desc: string };
+}
 
-  useEffect(() => {
-    if (category && ruleName) {
-      getRuleDetail(category, ruleName).then(setRule);
-    }
-  }, [category, ruleName]);
-
-  return rule ? (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold">{rule.name}</h1>
-      <p className="mt-4">
-        {rule.desc ? rule.desc.join(" ") : "No description available."}
-      </p>
+const RulesDetailPage = ({ rule }: RulesDetailPageProps) => {
+  return (
+    <div className="p-4 bg-white shadow-md rounded-lg">
+      <h2 className="text-2xl font-bold">{rule.name}</h2>
+      <div className="mt-4 prose max-w-none">
+        <ReactMarkdown>{rule.desc}</ReactMarkdown>
+      </div>
     </div>
-  ) : (
-    <p>加载中...</p>
   );
 };
 
-export default RuleDetailPage;
+export default RulesDetailPage;
