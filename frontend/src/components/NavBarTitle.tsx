@@ -1,10 +1,10 @@
 //import React from 'react'
-
+import { Link } from "react-router-dom";
 const NavBarTitle = () => {
   return (
-    <a className="btn btn-ghost text-xl text-pink-500 font-bold">
+    <Link to="/" className="btn btn-ghost text-xl text-pink-500 font-bold">
       TRPG ASSISTANT
-    </a>
+    </Link>
   );
 };
 
