@@ -38,7 +38,7 @@ const HomePageMenuButton = () => {
           <Link to="/character-creation">Create a Character</Link>
         </li>
         <li>
-          <a>Roll a Dice</a>
+          <Link to="/dice">Roll a Dice</Link>
         </li>
       </ul>
     </div>
