@@ -20,12 +20,12 @@ const DiceRoller: React.FC = () => {
   );
   const [modifier, setModifier] = useState(0);
 
-  // 🎲 添加骰子
+  // 添加骰子
   const addDice = (diceType: DiceType) => {
     setSelectedDice((prev) => ({ ...prev, [diceType]: prev[diceType] + 1 }));
   };
 
-  // 🎲 移除骰子
+  //  移除骰子
   const removeDice = (diceType: DiceType) => {
     setSelectedDice((prev) => ({
       ...prev,
@@ -33,7 +33,7 @@ const DiceRoller: React.FC = () => {
     }));
   };
 
-  // 🎲 投掷骰子
+  //  投掷骰子
   const rollDice = () => {
     const newResults: { type: DiceType; value: number }[] = [];
     Object.entries(selectedDice).forEach(([type, quantity]) => {
@@ -50,11 +50,11 @@ const DiceRoller: React.FC = () => {
     setResults([...newResults, ...results].slice(0, 10));
   };
 
-  // 🎲 计算总和
+  //  计算总和
   const calculateTotal = () =>
     results.reduce((sum, dice) => sum + dice.value, 0) + modifier;
 
-  // 🎲 定义骰子 SVG
+  // 定义骰子 SVG
   const diceSVGs: { [key in DiceType]: React.JSX.Element } = {
     d4: (
       <svg

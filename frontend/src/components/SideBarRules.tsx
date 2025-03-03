@@ -30,7 +30,7 @@ const SideBarRules = ({
               }`}
               onClick={() =>
                 setCategory(selectedCategory === category ? null : category)
-              } // ✅ 修正 setCategory 逻辑
+              }
             >
               {category.toUpperCase()}{" "}
               {selectedCategory === category ? "▲" : "▼"}
