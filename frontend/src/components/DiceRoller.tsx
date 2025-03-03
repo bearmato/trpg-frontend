@@ -213,7 +213,7 @@ M191.1,60 L191.1,156 L108,204 L24.9,156 L24.9,60 L108,12z"
               </button>
               <button
                 onClick={() => addDice(diceType as DiceType)}
-                className="w-12 h-12 flex items-center justify-center bg-gray-900 border border-gray-500 rounded cursor-pointer hover:bg-gray-800"
+                className="w-12 h-12 flex items-center justify-center bg-gray-900 border border-gray-500 rounded-sm cursor-pointer hover:bg-gray-800"
               >
                 {diceSVGs[diceType as DiceType]}
               </button>

@@ -82,7 +82,7 @@ const CharacterCreationPage = () => {
       <h1 className="text-3xl font-bold mb-6">创建角色</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-base-200 p-4 rounded-lg shadow">
+        <div className="bg-base-200 p-4 rounded-lg shadow-sm">
           <h2 className="text-xl font-semibold mb-4">基本信息</h2>
 
           <div className="form-control mb-4">
@@ -141,7 +141,7 @@ const CharacterCreationPage = () => {
           </div>
         </div>
 
-        <div className="bg-base-200 p-4 rounded-lg shadow">
+        <div className="bg-base-200 p-4 rounded-lg shadow-sm">
           <h2 className="text-xl font-semibold mb-4">能力值</h2>
 
           {Object.entries(stats).map(([stat, value]) => (

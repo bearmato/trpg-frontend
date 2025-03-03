@@ -31,7 +31,7 @@ const AIGMPage = () => {
       </h1>
 
       {/* 聊天窗口 */}
-      <div className="flex-1 overflow-auto bg-white p-4 rounded-lg shadow">
+      <div className="flex-1 overflow-auto bg-white p-4 rounded-lg shadow-sm">
         {messages.map((msg, index) => (
           <div
             key={index}
