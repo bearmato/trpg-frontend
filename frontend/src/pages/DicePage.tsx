@@ -4,7 +4,7 @@ import DiceRoller from "../components/DiceRoller";
 const DicePage: React.FC = () => {
   return (
     <div className="min-h-screen bg-base-200 py-10 flex items-center justify-center">
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-lg">
         <DiceRoller />
       </div>
     </div>
