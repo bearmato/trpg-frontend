@@ -74,6 +74,18 @@ const DiceRoller: React.FC = () => {
     });
   };
 
+  // 清空结果
+  const clearResults = () => {
+    setResults([]);
+  };
+
+  // 重置所有 (清空骰子选择，修正值和结果)
+  const resetAll = () => {
+    clearAllDice();
+    setModifier(0);
+    clearResults();
+  };
+
   // 投掷骰子方法
   const rollDice = () => {
     const newResults: { type: DiceType; value: number }[] = [];
@@ -94,7 +106,7 @@ const DiceRoller: React.FC = () => {
     });
 
     // 更新结果，最多显示10个
-    setResults([...newResults, ...results].slice(0, 10));
+    setResults(newResults);
   };
 
   // 计算总和方法
@@ -205,20 +217,37 @@ const DiceRoller: React.FC = () => {
       </div>
 
       {/* 投掷按钮 */}
-      <button
-        onClick={rollDice}
-        disabled={!hasDiceSelected}
-        className="btn w-full bg-gray-800 text-white border-gray-600 hover:bg-gray-700"
-      >
-        🎲 Roll Dice
-      </button>
+      <div className="flex gap-2 mb-4">
+        <button
+          onClick={rollDice}
+          disabled={!hasDiceSelected}
+          className="btn flex-1 bg-gray-800 text-white border-gray-600 hover:bg-gray-700"
+        >
+          🎲 Roll Dice
+        </button>
+
+        <button
+          onClick={resetAll}
+          className="btn bg-gray-800 text-white border-gray-600 hover:bg-gray-700"
+        >
+          Reset All
+        </button>
+      </div>
 
       {/* 结果显示区域 */}
       {results.length > 0 && (
         <div className="mt-4">
           {/* 总和 */}
-          <div className="alert bg-gray-900 text-white border-gray-600 mb-2">
-            <span className="font-bold">Total: {calculateTotal()}</span>
+          <div className="bg-gray-900 p-3 rounded-lg border border-gray-700 mb-3 flex justify-between items-center">
+            <span className="font-bold text-white">
+              Total: {calculateTotal()}
+            </span>
+            <button
+              onClick={clearResults}
+              className="btn btn-xs bg-gray-800 text-white border-gray-600 hover:bg-gray-700"
+            >
+              Clear Results
+            </button>
           </div>
 
           {/* 单个骰子结果 */}
