@@ -2,13 +2,13 @@
  * @todo 添加route
  */
 
-import bgImage from "../assets/HeroSectionBG.jpg";
+//import bgImage from "../assets/HeroSectionBG.jpg";
 
 const Hero = () => {
   return (
     <div
       className="hero min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url(${bgImage})` }} // 背景图片路径
+      style={{ backgroundImage: `url('./images/HeroSectionBG.jpg')` }} // 背景图片路径
     >
       <div className="hero-overlay bg-opacity-50"></div> {/*半透明遮罩 */}
       <div className="hero-content text-center text-neutral-content">
