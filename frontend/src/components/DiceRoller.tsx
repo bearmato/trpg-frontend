@@ -172,11 +172,6 @@ const DiceRoller: React.FC = () => {
 
             {/* 显示骰子类型 */}
             <div className="text-gray-400 text-xs mt-1">{diceType}</div>
-
-            {/* 显示当前骰子数量 */}
-            <div className="badge badge-outline border-gray-500 text-white mt-1">
-              {selectedDice[diceType as DiceType]}
-            </div>
           </div>
         ))}
       </div>
