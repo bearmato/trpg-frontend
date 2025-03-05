@@ -86,6 +86,7 @@ const DraggableDiceButton = ({ toggleDrawer }: DraggableDiceButtonProps) => {
         alt="Dice"
         className="w-10 h-10 animate-pulse"
         style={{ filter: "brightness(0) invert(1)" }} // 使SVG变为白色
+        draggable={false}
       />
     </div>
   );
