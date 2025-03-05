@@ -434,9 +434,9 @@ const AIGMPage: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen bg-base-200 overflow-hidden">
+    <div className="flex h-screen bg-base-100 overflow-hidden">
       {/* Left sidebar - chat history */}
-      <div className="w-64 bg-base-300 flex flex-col border-r border-base-content/10 overflow-hidden">
+      <div className="w-64 bg-base-200 flex flex-col border-r border-base-content/10 overflow-hidden">
         <div className="p-2 flex justify-between items-center border-b border-base-content/10">
           <h2 className="text-lg font-bold">Chat Sessions</h2>
           <button
@@ -501,7 +501,7 @@ const AIGMPage: React.FC = () => {
       {/* Main chat area - using a grid layout to ensure fixed input */}
       <div className="flex-1 grid grid-rows-[auto_1fr_auto] h-screen">
         {/* Top header */}
-        <div className="p-3 bg-base-300 shadow-sm border-b border-base-content/10">
+        <div className="p-3 bg-base-200 shadow-sm border-b border-base-content/10">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold text-primary">AI Game Master</h1>
             <div className="space-x-2">
@@ -525,7 +525,7 @@ const AIGMPage: React.FC = () => {
         <div className="overflow-y-auto p-4">
           <div
             ref={chatContainerRef}
-            className="max-w-4xl mx-auto bg-base-100 rounded-xl shadow-sm border border-base-300 p-4"
+            className="max-w-4xl mx-auto bg-base-200 rounded-xl shadow-sm border border-base-300 p-4"
           >
             {activeChatId ? (
               getActiveMessages().map((msg, index) => (
@@ -564,8 +564,8 @@ const AIGMPage: React.FC = () => {
                   <div
                     className={`chat-bubble shadow-sm ${
                       msg.role === "player"
-                        ? "bg-primary text-primary-content"
-                        : "bg-neutral text-neutral-content"
+                        ? "bg-neutral text-neutral-content"
+                        : "bg-primary text-primary-content"
                     }`}
                   >
                     {/* Support simple text formatting like line breaks */}
