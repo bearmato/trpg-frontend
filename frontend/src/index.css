@@ -1,8 +1,41 @@
 @import 'tailwindcss';
 @plugin "daisyui";
-@plugin "daisyui" {
-    themes: light --default, dark --prefersdark, cupcake, dracula
-  }
+
+@plugin "daisyui/theme" {
+  name: "dnd";
+  default: true;
+  prefersdark: false;
+  color-scheme: "light";
+  --color-base-100: #F8F2DE;
+  --color-base-200: #ECDCBF;
+  --color-base-300: oklch(86% 0.005 56.366);
+  --color-base-content: oklch(21% 0.006 285.885);
+  --color-primary: #A31D1D;
+  --color-primary-content: #F8F2DE;
+  --color-secondary: #D84040;
+  --color-secondary-content: #F8F2DE;
+  --color-accent: oklch(79% 0.184 86.047);
+  --color-accent-content: oklch(28% 0.141 291.089);
+  --color-neutral: oklch(27% 0.006 286.033);
+  --color-neutral-content: oklch(98% 0 0);
+  --color-info: oklch(74% 0.16 232.661);
+  --color-info-content: oklch(29% 0.066 243.157);
+  --color-success: oklch(79% 0.209 151.711);
+  --color-success-content: oklch(26% 0.065 152.934);
+  --color-warning: oklch(57% 0.245 27.325);
+  --color-warning-content: oklch(98% 0.003 247.858);
+  --color-error: oklch(70% 0.191 22.216);
+  --color-error-content: oklch(25% 0.092 26.042);
+  --radius-selector: 2rem;
+  --radius-field: 2rem;
+  --radius-box: 2rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1.5px;
+  --depth: 1;
+  --noise: 0;
+}
+
 
 
 @layer base {
