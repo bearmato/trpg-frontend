@@ -18,41 +18,28 @@ export interface RuleCategory {
 }
 
 /**
- * Get all rulebook categories from the API
- * @returns Array of rulebook categories with their books
+ * 获取所有规则书分类
  */
 export const getRuleBooks = async (): Promise<RuleCategory[]> => {
   try {
     const response = await axios.get(`${API_BASE_URL}/books/`);
-    
-    if (response.data.status === 'success') {
-      return response.data.data;
-    } else {
-      throw new Error("Failed to get rulebooks data");
-    }
+    return response.data.data;
   } catch (error) {
-    console.error("❌ Failed to get rulebooks:", error);
-    if (axios.isAxiosError(error) && error.response) {
-      throw new Error(`Error ${error.response.status}: ${error.response.data.error || 'Unknown error'}`);
-    }
-    throw new Error("Network error while fetching rulebooks");
+    console.error("❌ 获取规则书失败:", error);
+    return [];
   }
 };
 
 /**
- * Get URL for viewing a specific PDF
- * @param filename Name of the PDF file
- * @returns Full URL to access the PDF
+ * 获取查看特定PDF的URL
  */
 export const getPDFViewUrl = (filename: string): string => {
   return `${API_BASE_URL}/pdf/${encodeURIComponent(filename)}`;
 };
 
 /**
- * Get download URL for a specific PDF
- * @param filename Name of the PDF file
- * @returns Full URL to download the PDF
+ * 获取下载特定PDF的URL
  */
 export const getPDFDownloadUrl = (filename: string): string => {
-  return `${API_BASE_URL}/pdf/${encodeURIComponent(filename)}`;
+  return `${API_BASE_URL}/download/${encodeURIComponent(filename)}`;
 };

@@ -1,7 +1,11 @@
 // frontend/src/pages/RulesPage.tsx
 import React, { useState, useEffect } from "react";
-import { getRuleBooks, RuleBook, getPDFViewUrl } from "../api/rules";
-import PDFViewer from "../components/PDFViewer";
+import {
+  getRuleBooks,
+  RuleBook,
+  getPDFViewUrl,
+  getPDFDownloadUrl,
+} from "../api/rules";
 
 const RulesPage: React.FC = () => {
   // 状态管理
@@ -41,6 +45,11 @@ const RulesPage: React.FC = () => {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
+  // 在新标签页中打开PDF
+  const openPDFInNewTab = (url: string) => {
+    window.open(url, "_blank");
   };
 
   return (
@@ -125,51 +134,77 @@ const RulesPage: React.FC = () => {
               ))}
             </div>
 
-            {/* PDF查看器 */}
+            {/* 选中的规则书详情 */}
             {selectedBook && (
               <div className="bg-white rounded-lg overflow-hidden shadow-lg border border-gray-100">
-                <div className="bg-[#A31D1D] text-white p-4 flex justify-between items-center">
+                <div className="bg-[#A31D1D] text-white p-4 flex items-center justify-between">
                   <h2 className="text-xl font-bold">{selectedBook.title}</h2>
-                  <a
-                    href={getPDFViewUrl(selectedBook.filename)}
-                    download={selectedBook.filename}
-                    className="btn bg-white hover:bg-white/90 text-[#A31D1D] border-none"
-                  >
-                    View PDF
-                  </a>
                 </div>
-                <div className="p-4 bg-gray-100 border-b border-gray-200">
-                  <p>{selectedBook.description}</p>
-                </div>
-                <div className="h-[600px]">
-                  <PDFViewer
-                    filename={selectedBook.filename}
-                    title={selectedBook.title}
-                  />
+
+                <div className="p-6">
+                  <h3 className="font-bold text-gray-700 text-lg mb-2">
+                    详细描述
+                  </h3>
+                  <p className="text-gray-600 mb-6">
+                    {selectedBook.description}
+                  </p>
+
+                  <div className="mt-6">
+                    <div className="bg-white border border-gray-200 rounded-lg p-6">
+                      <button
+                        onClick={() =>
+                          openPDFInNewTab(getPDFViewUrl(selectedBook.filename))
+                        }
+                        className="btn w-full mb-4 btn-lg bg-[#A31D1D] hover:bg-[#8B0000] text-white border-none"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 mr-2"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                          />
+                        </svg>
+                        在新标签页中查看
+                      </button>
+
+                      <a
+                        href={getPDFDownloadUrl(selectedBook.filename)}
+                        className="btn w-full btn-lg btn-outline border-[#A31D1D] text-[#A31D1D] hover:bg-[#A31D1D] hover:text-white"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 mr-2"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                          />
+                        </svg>
+                        DownLoad PDF
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
-
-            {/* 页脚说明 */}
-            <div className="mt-10 p-5 bg-[#E5DCC3] rounded-lg text-sm text-[#5C3A21] shadow-sm">
-              <p className="mb-3">
-                这些规则书仅供参考。官方规则和内容由Wizards of the Coast发布。
-                更多资源，请访问
-                <a
-                  href="https://dnd.wizards.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#A31D1D] hover:underline ml-1"
-                >
-                  官方D&D网站
-                </a>
-                。
-              </p>
-              <p className="text-xs text-[#5C3A21]/70">
-                D&D 5e规则书是Wizards of the Coast的知识产权。
-                这些PDF版本仅供参考。
-              </p>
-            </div>
           </div>
         )}
       </div>
