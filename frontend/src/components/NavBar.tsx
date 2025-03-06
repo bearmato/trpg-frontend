@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import HomePageMenu from "./HomePageMenu";
 import LoginButton from "./LoginButton";
 import NavBarTitle from "./NavBarTitle";
-import ThemeButton from "./ThemeButton";
+//import ThemeButton from "./ThemeButton";
 import DiceToggleButton from "./DiceToggleButton";
 import { useDiceWidget } from "./DiceWidgetProvider";
 
@@ -23,7 +23,7 @@ const NavBar = () => {
           toggleDiceWidget={toggleDiceWidget}
           isDiceWidgetVisible={isDiceWidgetVisible}
         />
-        <ThemeButton />
+
         <LoginButton />
       </div>
     </div>
