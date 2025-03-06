@@ -128,11 +128,6 @@ const AIGMPage: React.FC = () => {
       setActiveChatId(
         updatedSessions.length > 0 ? updatedSessions[0].id : null
       );
-
-      // 如果没有聊天了，创建一个新的
-      if (updatedSessions.length === 0) {
-        createNewChatSession();
-      }
     }
 
     saveSessions(updatedSessions);

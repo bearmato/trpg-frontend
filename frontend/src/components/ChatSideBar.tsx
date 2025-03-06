@@ -40,7 +40,7 @@ const ChatSideBar: React.FC<ChatSideBarProps> = ({
         <h2 className="text-lg font-bold">Chat History</h2>
         <button
           className="btn btn-sm btn-ghost"
-          onClick={createNewChatSession}
+          onClick={() => createNewChatSession()}
           title="New Chat"
         >
           <svg

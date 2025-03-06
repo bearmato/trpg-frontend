@@ -101,7 +101,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
               </p>
               <button
                 className="btn btn-primary mt-4"
-                onClick={createNewChatSession}
+                onClick={() => createNewChatSession()}
               >
                 开始新对话
               </button>
