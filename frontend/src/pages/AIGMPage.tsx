@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { sendMessageToAIGM } from "../api/aigm";
 import { useDiceWidget } from "../components/DiceWidgetProvider";
 import { Message, ChatSession } from "../types/chat";
-import ChatSideBar from "../components/ChatSidebar";
+import ChatSideBar from "../components/ChatSideBar";
 import ChatWindow from "../components/ChatWindow";
 import ChatInput from "../components/ChatInput";
 
 // 生成唯一ID
 const generateId = () => {
+  1;
   return Date.now().toString(36) + Math.random().toString(36).substring(2, 9);
 };
 
