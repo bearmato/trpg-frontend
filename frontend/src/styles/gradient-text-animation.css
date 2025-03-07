@@ -1,0 +1,82 @@
+/* 渐变文字动画样式 - 基于 reactbits.dev/text-animations/gradient-text */
+
+/* 方法1: 动态渐变文字 */
+.animated-gradient-text {
+    background: linear-gradient(
+      to right,
+      #12c2e9, #c471ed, #f64f59, #12c2e9
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-size: 300% 100%;
+    animation: gradient-shift 4s ease infinite;
+  }
+  
+  @keyframes gradient-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  /* 可选: 渐变放大动画 */
+  .animated-gradient-text-scale {
+    background: linear-gradient(
+      to right,
+      #00c6ff, #0072ff, #9e37d1, #00c6ff
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-size: 300% 100%;
+    animation: gradient-shift 4s ease infinite, scale-text 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes scale-text {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(1.05);
+    }
+  }
+  
+  /* 可选: 霓虹灯效果 */
+  .neon-gradient-text {
+    background: linear-gradient(
+      to right,
+      #12c2e9, #c471ed, #f64f59, #12c2e9
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-size: 300% 100%;
+    animation: gradient-shift 4s ease infinite;
+    text-shadow: 
+      0 0 10px rgba(18, 194, 233, 0.5),
+      0 0 20px rgba(18, 194, 233, 0.3),
+      0 0 30px rgba(18, 194, 233, 0.1);
+  }
+  
+  /* 可选: TRPG主题渐变色 */
+  .rpg-gradient-text {
+    background: linear-gradient(
+      to right,
+      #67e8f9, /* 青色 */
+      #c084fc, /* 紫色 */
+      #f59e0b, /* 琥珀色 */
+      #67e8f9  /* 回到青色 */
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-size: 300% 100%;
+    animation: gradient-shift 4s ease infinite;
+    font-weight: bold;
+  }

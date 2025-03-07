@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "../styles/gradient-text-animation.css"; // 导入渐变文字动画样式
 
 const Hero: React.FC = () => {
   // 功能卡片数据 - 使用中文描述以与参考图一致
@@ -45,28 +46,28 @@ const Hero: React.FC = () => {
   return (
     <div>
       {/* 主Hero部分，增加了容器和圆角边框 */}
-      <div className="container-fluid max-w-[95%] mx-auto mt-4">
-        <div className="rounded-2xl overflow-hidden shadow-lg">
+      <div className="container-fluid max-w-[95%] mx-auto mt-4 ">
+        <div className="rounded-3xl overflow-hidden shadow-lg">
           <div
-            className="hero h-[75vh] bg-cover bg-center"
+            className="hero h-[75vh] bg-cover bg-center "
             style={{ backgroundImage: `url('./images/HeroSectionBG04.jpg')` }}
           >
             <div className="hero-overlay bg-opacity-50"></div>
             <div className="hero-content text-center text-neutral-content z-10">
-              <div className="max-w-lg">
-                {/* 更简洁、更专业的标题动画 */}
-                <h1 className="text-6xl font-bold mb-3 drop-shadow-[0_2px_5px_rgba(0,0,0,0.7)]">
-                  <span className="inline-block text-cyan-300  transition-colors duration-300">
-                    TRPG
-                  </span>{" "}
-                  <span className="text-white">ASSISTANT</span>
+              {/* 使用TRPG主题的渐变文字动画效果 */}
+              <div className="relative max-w-lg">
+                {/* 主标题 */}
+                <h1 className="text-6xl font-bold mb-3">
+                  <span className="rpg-gradient-text drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                    TRPG ASSISTANT
+                  </span>
                 </h1>
 
-                {/* 简化的渐变分隔线 */}
-                <div className="h-1 w-40 bg-gradient-to-r from-cyan-400 via-purple-400 to-amber-400 mx-auto my-4 rounded-full shadow-lg"></div>
+                {/* 更明显的渐变分隔线 */}
+                <div className="h-1.5 w-48 bg-gradient-to-r from-cyan-500 via-purple-500 to-amber-500 mx-auto my-4 rounded-full shadow-lg"></div>
 
-                {/* 简洁的副标题 */}
-                <p className="text-white text-xl drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] font-medium tracking-wide">
+                {/* 增强副标题可读性 */}
+                <p className="text-white text-xl font-semibold tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                   Your complete toolkit for tabletop adventures
                 </p>
               </div>
@@ -76,14 +77,14 @@ const Hero: React.FC = () => {
       </div>
 
       {/* 功能卡片区域 - 使用与参考图一致的设计 */}
-      <div className="bg-white pt-8 pb-16">
+      <div className="bg-base-100 pt-8 pb-16">
         <div className="container-fluid max-w-[90%] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <Link
                 to={feature.link}
                 key={index}
-                className="overflow-hidden flex flex-col bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                className="overflow-hidden flex flex-col bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow"
               >
                 {/* 图片区域 */}
                 <div className="w-full rounded-t-lg overflow-hidden">
@@ -100,7 +101,7 @@ const Hero: React.FC = () => {
                 </div>
 
                 {/* 内容区域 */}
-                <div className="p-6 bg-white flex-grow">
+                <div className="p-6 bg-base-200 flex-grow">
                   <h3 className="text-2xl font-bold text-[#A31D1D] mb-2">
                     {feature.title}
                   </h3>
