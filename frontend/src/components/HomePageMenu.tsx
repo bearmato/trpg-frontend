@@ -10,7 +10,7 @@ const HomePageMenu = () => {
         <Link to="/ai-gm">AI GM</Link>
       </li>
       <li>
-        <Link to="/map">map generater</Link>
+        <Link to="/map-generator">map generater</Link>
       </li>
       <li>
         <Link to="/background">background</Link>

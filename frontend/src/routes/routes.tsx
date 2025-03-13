@@ -6,6 +6,7 @@ import CharacterCreationPage from "../pages/CharacterCreationPage";
 import AIGMPage from "../pages/AIGMPage";
 import Layout from "../layouts/Layout";
 import DicePage from "../pages/DicePage";
+import MapGeneratorPage from "../pages/MapGeneratorPage";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
       { path: "/character-creation", element: <CharacterCreationPage /> },
       { path: "/ai-gm", element: <AIGMPage /> },
       { path: "/dice", element: <DicePage /> },
+      { path: "/map-generator", element: <MapGeneratorPage /> },
     ],
   },
 ]);
