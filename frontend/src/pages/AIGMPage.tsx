@@ -5,6 +5,7 @@ import { Message, ChatSession } from "../types/chat";
 import ChatSideBar from "../components/ChatSideBar";
 import ChatWindow from "../components/ChatWindow";
 import ChatInput from "../components/ChatInput";
+import BackgroundDialog from "../components/BackgroundDialog";
 
 // 生成唯一ID
 const generateId = () => {
@@ -32,6 +33,9 @@ const AIGMPage: React.FC = () => {
 
   // 获取骰子功能
   const { toggleDrawer } = useDiceWidget();
+
+  // 背景生成对话框状态
+  const [isBackgroundDialogOpen, setIsBackgroundDialogOpen] = useState(false);
 
   // 组件挂载时，加载保存的聊天会话
   useEffect(() => {
@@ -168,6 +172,37 @@ const AIGMPage: React.FC = () => {
     toggleDrawer();
   };
 
+  // 处理背景生成结果
+  const handleBackgroundGenerated = (background: string) => {
+    if (!activeChatId) {
+      createNewChatSession();
+      // 需要等待新会话创建
+      setTimeout(() => {
+        const gmMessage: Message = {
+          role: "gm",
+          text: `Here's the character background I generated for you:\n\n${background}`,
+          timestamp: new Date(),
+        };
+
+        const activeChat = chatSessions.find(
+          (session) => session.id === activeChatId
+        );
+        if (activeChat) {
+          updateActiveChat([...activeChat.messages, gmMessage]);
+        }
+      }, 100);
+    } else {
+      const gmMessage: Message = {
+        role: "gm",
+        text: `Here's the character background I generated for you:\n\n${background}`,
+        timestamp: new Date(),
+      };
+
+      const activeMessages = getActiveMessages();
+      updateActiveChat([...activeMessages, gmMessage]);
+    }
+  };
+
   // 发送消息给AI GM
   const sendMessage = async (input: string) => {
     if (!activeChatId || !input.trim() || isLoading) return;
@@ -239,6 +274,12 @@ const AIGMPage: React.FC = () => {
         <div className="p-3 bg-base-200 shadow-sm border-b border-base-content/10">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold text-primary">AI Game Master</h1>
+            <button
+              onClick={() => setIsBackgroundDialogOpen(true)}
+              className="btn btn-sm btn-primary"
+            >
+              Generate Character Background
+            </button>
           </div>
         </div>
 
@@ -258,6 +299,13 @@ const AIGMPage: React.FC = () => {
           disabled={!activeChatId}
         />
       </div>
+
+      {/* 背景生成对话框 */}
+      <BackgroundDialog
+        isOpen={isBackgroundDialogOpen}
+        onClose={() => setIsBackgroundDialogOpen(false)}
+        onGenerated={handleBackgroundGenerated}
+      />
     </div>
   );
 };

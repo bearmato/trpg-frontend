@@ -39,27 +39,6 @@ export interface AdventureOptions {
 }
 
 /**
- * Generate a new adventure opening
- * @param options Adventure configuration options
- * @returns Adventure opening introduction
- */
-export const startNewAdventure = async (options: AdventureOptions) => {
-  try {
-    const response = await axios.post(
-      `${API_BASE_URL}/adventure-start/`, 
-      options
-    );
-    return response.data;
-  } catch (error) {
-    console.error("Failed to generate adventure opening:", error);
-    if (axios.isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Failed to generate adventure opening");
-    }
-    throw new Error("Cannot connect to AI GM service");
-  }
-};
-
-/**
  * Character background generator options
  */
 export interface BackgroundOptions {
