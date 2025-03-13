@@ -1,43 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { generateCharacterBackground } from "../api/aigm";
+import { generateCharacterPortrait } from "../api/aigm";
 import KeywordInput from "./KeywordInput";
 import { CharacterData } from "../types/character";
 
-interface BackgroundFormProps {
-  onGenerated: (background: string) => void;
+interface PortraitFormProps {
+  onGenerated: (portraitUrl: string) => void;
   onClose: () => void;
   initialData?: CharacterData;
   onSaveCharacter?: (data: CharacterData) => void;
-  openPortraitDialog?: () => void;
+  openBackgroundDialog?: () => void;
 }
 
-const BackgroundForm: React.FC<BackgroundFormProps> = ({
+const PortraitForm: React.FC<PortraitFormProps> = ({
   onGenerated,
   onClose,
   initialData,
   onSaveCharacter,
-  openPortraitDialog,
+  openBackgroundDialog,
 }) => {
   const [name, setName] = useState("");
   const [race, setRace] = useState("");
   const [characterClass, setCharacterClass] = useState("");
-  const [keywords, setKeywords] = useState<string[]>([]);
-  const [tone, setTone] = useState("balanced");
+  const [gender, setGender] = useState("male");
+  const [style, setStyle] = useState("fantasy");
+  const [features, setFeatures] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [showContinueOptions, setShowContinueOptions] = useState(false);
-
-  // 初始化数据
-  useEffect(() => {
-    if (initialData) {
-      if (initialData.name) setName(initialData.name);
-      if (initialData.race) setRace(initialData.race);
-      if (initialData.class) setCharacterClass(initialData.class);
-      if (initialData.keywords) setKeywords(initialData.keywords);
-      if (initialData.tone) setTone(initialData.tone);
-    }
-  }, [initialData]);
 
   // 预定义选项
   const races = [
@@ -67,21 +57,62 @@ const BackgroundForm: React.FC<BackgroundFormProps> = ({
     "Barbarian",
   ];
 
-  const tones = [
-    "balanced",
-    "heroic",
-    "tragic",
-    "comedic",
-    "mysterious",
-    "dark",
-    "epic",
+  const styles = [
+    "fantasy",
+    "realistic",
+    "anime",
+    "comic",
+    "watercolor",
+    "oil painting",
+    "pixel art",
   ];
+
+  const genders = ["male", "female", "non-binary"];
+
+  const featureSuggestions = [
+    "scarred face",
+    "blue eyes",
+    "green eyes",
+    "brown eyes",
+    "white hair",
+    "black hair",
+    "blonde hair",
+    "red hair",
+    "tattoos",
+    "piercings",
+    "beard",
+    "clean shaven",
+    "one-eyed",
+    "tall",
+    "short",
+    "slim",
+    "muscular",
+    "dark skin",
+    "pale skin",
+    "medium skin",
+    "pointed ears",
+    "long hair",
+    "short hair",
+    "braided hair",
+    "hooded",
+  ];
+
+  // 初始化数据
+  useEffect(() => {
+    if (initialData) {
+      if (initialData.name) setName(initialData.name);
+      if (initialData.race) setRace(initialData.race);
+      if (initialData.class) setCharacterClass(initialData.class);
+      if (initialData.gender) setGender(initialData.gender);
+      if (initialData.features) setFeatures(initialData.features);
+    }
+  }, [initialData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!name || !race || !characterClass) {
-      setError("Name, race, and class are required");
+    if (!race || !characterClass) {
+      setError("Race and class are required");
       return;
     }
 
@@ -91,12 +122,13 @@ const BackgroundForm: React.FC<BackgroundFormProps> = ({
     setShowContinueOptions(false);
 
     try {
-      const response = await generateCharacterBackground({
+      const response = await generateCharacterPortrait({
         name,
         race,
         class: characterClass,
-        keywords: keywords,
-        tone,
+        gender,
+        style,
+        features,
       });
 
       // 保存角色数据
@@ -105,32 +137,35 @@ const BackgroundForm: React.FC<BackgroundFormProps> = ({
           name,
           race,
           class: characterClass,
-          keywords,
-          tone,
-          background: response.background,
+          gender,
+          features,
+          portraitUrl: response.image_url,
         });
       }
 
-      onGenerated(response.background);
+      onGenerated(response.image_url);
 
-      // 如果有头像，直接关闭
-      if (initialData?.portraitUrl) {
+      // 如果已经有背景信息，直接关闭
+      if (initialData?.background) {
         onClose();
-      } else if (openPortraitDialog) {
-        // 否则显示选项继续生成头像
+      }
+      // 如果没有背景但有背景生成功能，显示继续选项
+      else if (openBackgroundDialog) {
         setSuccessMessage(
-          "Background generated! Would you like to create a matching portrait?"
+          "Portrait generated successfully! Would you like to create a matching background story?"
         );
         setShowContinueOptions(true);
-      } else {
+      }
+      // 其他情况直接关闭
+      else {
         onClose();
       }
     } catch (err) {
-      console.error("Error generating background:", err);
+      console.error("Error generating portrait:", err);
       setError(
         err instanceof Error
           ? err.message
-          : "Failed to generate character background"
+          : "Failed to generate character portrait"
       );
     } finally {
       setIsLoading(false);
@@ -141,7 +176,7 @@ const BackgroundForm: React.FC<BackgroundFormProps> = ({
     <div className="p-6 bg-base-100 rounded-lg shadow-lg border border-primary/20">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold text-primary">
-          Generate Character Background
+          Generate Character Portrait
         </h2>
         <button onClick={onClose} className="btn btn-sm btn-ghost">
           ✕
@@ -170,14 +205,13 @@ const BackgroundForm: React.FC<BackgroundFormProps> = ({
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div className="form-control">
-            <label className="label">Character Name</label>
+            <label className="label">Character Name (Optional)</label>
             <input
               type="text"
               className="input input-bordered"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter character name"
-              required
             />
           </div>
 
@@ -216,23 +250,42 @@ const BackgroundForm: React.FC<BackgroundFormProps> = ({
           </div>
 
           <div className="form-control">
-            <label className="label">Story Tone</label>
+            <label className="label">Gender</label>
             <select
               className="select select-bordered w-full"
-              value={tone}
-              onChange={(e) => setTone(e.target.value)}
+              value={gender}
+              onChange={(e) => setGender(e.target.value)}
             >
-              {tones.map((t) => (
-                <option key={t} value={t}>
-                  {t.charAt(0).toUpperCase() + t.slice(1)}
+              {genders.map((g) => (
+                <option key={g} value={g}>
+                  {g.charAt(0).toUpperCase() + g.slice(1)}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-control">
+            <label className="label">Art Style</label>
+            <select
+              className="select select-bordered w-full"
+              value={style}
+              onChange={(e) => setStyle(e.target.value)}
+            >
+              {styles.map((s) => (
+                <option key={s} value={s}>
+                  {s.charAt(0).toUpperCase() + s.slice(1)}
                 </option>
               ))}
             </select>
           </div>
 
           <div className="form-control md:col-span-2">
-            <label className="label">Keywords</label>
-            <KeywordInput value={keywords} onChange={setKeywords} />
+            <label className="label">Character Features</label>
+            <KeywordInput
+              value={features}
+              onChange={setFeatures}
+              suggestions={featureSuggestions}
+            />
           </div>
         </div>
 
@@ -240,7 +293,7 @@ const BackgroundForm: React.FC<BackgroundFormProps> = ({
           <div className="mt-6 p-4 bg-success/10 rounded-lg border border-success/30">
             <p className="text-success font-medium mb-2">{successMessage}</p>
             <p className="text-success/80 text-sm mb-4">
-              Your background has been generated and added to the chat.
+              Your portrait has been generated and added to the chat.
             </p>
             <div className="flex justify-end gap-2">
               <button
@@ -250,16 +303,16 @@ const BackgroundForm: React.FC<BackgroundFormProps> = ({
               >
                 Close
               </button>
-              {openPortraitDialog && (
+              {openBackgroundDialog && (
                 <button
                   type="button"
                   className="btn btn-primary"
                   onClick={() => {
                     onClose();
-                    openPortraitDialog();
+                    openBackgroundDialog();
                   }}
                 >
-                  Generate Portrait
+                  Generate Background Story
                 </button>
               )}
             </div>
@@ -285,7 +338,7 @@ const BackgroundForm: React.FC<BackgroundFormProps> = ({
                   Generating...
                 </>
               ) : (
-                "Generate Background"
+                "Generate Portrait"
               )}
             </button>
           </div>
@@ -295,4 +348,4 @@ const BackgroundForm: React.FC<BackgroundFormProps> = ({
   );
 };
 
-export default BackgroundForm;
+export default PortraitForm;

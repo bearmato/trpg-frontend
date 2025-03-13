@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import { sendMessageToAIGM } from "../api/aigm";
 import { useDiceWidget } from "../components/DiceWidgetProvider";
 import { Message, ChatSession } from "../types/chat";
+import { CharacterData } from "../types/character";
 import ChatSideBar from "../components/ChatSideBar";
 import ChatWindow from "../components/ChatWindow";
 import ChatInput from "../components/ChatInput";
 import BackgroundDialog from "../components/BackgroundDialog";
+import PortraitDialog from "../components/PortraitDialog";
 
 // 生成唯一ID
 const generateId = () => {
-  1;
   return Date.now().toString(36) + Math.random().toString(36).substring(2, 9);
 };
 
@@ -36,6 +37,16 @@ const AIGMPage: React.FC = () => {
 
   // 背景生成对话框状态
   const [isBackgroundDialogOpen, setIsBackgroundDialogOpen] = useState(false);
+
+  // 角色立绘对话框状态
+  const [isPortraitDialogOpen, setIsPortraitDialogOpen] = useState(false);
+
+  // 角色数据状态
+  const [characterData, setCharacterData] = useState<CharacterData>({
+    name: "",
+    race: "",
+    class: "",
+  });
 
   // 组件挂载时，加载保存的聊天会话
   useEffect(() => {
@@ -172,6 +183,20 @@ const AIGMPage: React.FC = () => {
     toggleDrawer();
   };
 
+  // 处理消息中的按钮动作
+  const handleMessageAction = (action: string) => {
+    switch (action) {
+      case "generate_portrait":
+        setIsPortraitDialogOpen(true);
+        break;
+      case "generate_background":
+        setIsBackgroundDialogOpen(true);
+        break;
+      default:
+        console.log("Unknown action:", action);
+    }
+  };
+
   // 处理背景生成结果
   const handleBackgroundGenerated = (background: string) => {
     if (!activeChatId) {
@@ -184,11 +209,24 @@ const AIGMPage: React.FC = () => {
           timestamp: new Date(),
         };
 
+        const actionMessage: Message = {
+          role: "system",
+          text: "Would you like to generate a matching portrait for this character?",
+          timestamp: new Date(),
+          actions: [
+            {
+              label: "Generate Character Portrait",
+              action: "generate_portrait",
+              style: "primary",
+            },
+          ],
+        };
+
         const activeChat = chatSessions.find(
           (session) => session.id === activeChatId
         );
         if (activeChat) {
-          updateActiveChat([...activeChat.messages, gmMessage]);
+          updateActiveChat([...activeChat.messages, gmMessage, actionMessage]);
         }
       }, 100);
     } else {
@@ -198,9 +236,126 @@ const AIGMPage: React.FC = () => {
         timestamp: new Date(),
       };
 
+      const actionMessage: Message = {
+        role: "system",
+        text: "Would you like to generate a matching portrait for this character?",
+        timestamp: new Date(),
+        actions: [
+          {
+            label: "Generate Character Portrait",
+            action: "generate_portrait",
+            style: "primary",
+          },
+        ],
+      };
+
       const activeMessages = getActiveMessages();
-      updateActiveChat([...activeMessages, gmMessage]);
+      updateActiveChat([...activeMessages, gmMessage, actionMessage]);
     }
+  };
+
+  // 处理立绘生成结果
+  const handlePortraitGenerated = (portraitUrl: string) => {
+    if (!activeChatId) {
+      createNewChatSession();
+      setTimeout(() => {
+        const gmMessage: Message = {
+          role: "gm",
+          text: `I've created a character portrait for you!\n\n![Character Portrait](${portraitUrl})`,
+          timestamp: new Date(),
+        };
+
+        const actionMessage: Message = {
+          role: "system",
+          text: "Would you like to generate a background story for this character?",
+          timestamp: new Date(),
+          actions: [
+            {
+              label: "Generate Character Background",
+              action: "generate_background",
+              style: "primary",
+            },
+          ],
+        };
+
+        const activeChat = chatSessions.find(
+          (session) => session.id === activeChatId
+        );
+        if (activeChat) {
+          updateActiveChat([...activeChat.messages, gmMessage, actionMessage]);
+        }
+      }, 100);
+    } else {
+      const gmMessage: Message = {
+        role: "gm",
+        text: `I've created a character portrait for you!\n\n![Character Portrait](${portraitUrl})`,
+        timestamp: new Date(),
+      };
+
+      const actionMessage: Message = {
+        role: "system",
+        text: "Would you like to generate a background story for this character?",
+        timestamp: new Date(),
+        actions: [
+          {
+            label: "Generate Character Background",
+            action: "generate_background",
+            style: "primary",
+          },
+        ],
+      };
+
+      const activeMessages = getActiveMessages();
+      updateActiveChat([...activeMessages, gmMessage, actionMessage]);
+    }
+
+    // 如果已经有背景故事，生成完整的角色汇总
+    if (characterData.background) {
+      setTimeout(() => generateCompleteCharacter(), 500);
+    }
+  };
+
+  // 处理保存角色数据
+  const handleSaveCharacter = (data: CharacterData) => {
+    setCharacterData({ ...characterData, ...data });
+  };
+
+  // 生成完整角色信息
+  const generateCompleteCharacter = () => {
+    if (
+      !activeChatId ||
+      !characterData.background ||
+      !characterData.portraitUrl
+    )
+      return;
+
+    const characterSummary = `
+# ${characterData.name || "Unnamed Character"}
+**Race:** ${characterData.race}
+**Class:** ${characterData.class}
+${characterData.gender ? `**Gender:** ${characterData.gender}` : ""}
+
+![Character Portrait](${characterData.portraitUrl})
+
+## Background Story
+${characterData.background}
+  `;
+
+    const gmMessage: Message = {
+      role: "gm",
+      text: characterSummary,
+      timestamp: new Date(),
+    };
+
+    const activeMessages = getActiveMessages();
+    updateActiveChat([...activeMessages, gmMessage]);
+
+    // 重置角色数据
+    setCharacterData({
+      name: "",
+      race: "",
+      class: "",
+    });
   };
 
   // 发送消息给AI GM
@@ -274,12 +429,20 @@ const AIGMPage: React.FC = () => {
         <div className="p-3 bg-base-200 shadow-sm border-b border-base-content/10">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold text-primary">AI Game Master</h1>
-            <button
-              onClick={() => setIsBackgroundDialogOpen(true)}
-              className="btn btn-sm btn-primary"
-            >
-              Generate Character Background
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setIsPortraitDialogOpen(true)}
+                className="btn btn-sm btn-secondary"
+              >
+                Generate Portrait
+              </button>
+              <button
+                onClick={() => setIsBackgroundDialogOpen(true)}
+                className="btn btn-sm btn-primary"
+              >
+                Generate Background
+              </button>
+            </div>
           </div>
         </div>
 
@@ -290,6 +453,7 @@ const AIGMPage: React.FC = () => {
           error={error}
           activeChatId={activeChatId}
           createNewChatSession={createNewChatSession}
+          onActionClick={handleMessageAction}
         />
 
         {/* 输入区域 - 固定在网格的底部行 */}
@@ -305,6 +469,25 @@ const AIGMPage: React.FC = () => {
         isOpen={isBackgroundDialogOpen}
         onClose={() => setIsBackgroundDialogOpen(false)}
         onGenerated={handleBackgroundGenerated}
+        initialData={characterData}
+        onSaveCharacter={handleSaveCharacter}
+        openPortraitDialog={() => {
+          setIsBackgroundDialogOpen(false);
+          setIsPortraitDialogOpen(true);
+        }}
+      />
+
+      {/* 角色立绘对话框 */}
+      <PortraitDialog
+        isOpen={isPortraitDialogOpen}
+        onClose={() => setIsPortraitDialogOpen(false)}
+        onGenerated={handlePortraitGenerated}
+        initialData={characterData}
+        onSaveCharacter={handleSaveCharacter}
+        openBackgroundDialog={() => {
+          setIsPortraitDialogOpen(false);
+          setIsBackgroundDialogOpen(true);
+        }}
       />
     </div>
   );

@@ -28,15 +28,7 @@ export const sendMessageToAIGM = async (
   }
 };
 
-/**
- * Adventure options interface
- */
-export interface AdventureOptions {
-  adventureType: string;
-  difficulty: string;
-  partyLevel: number;
-  setting?: string;
-}
+// Adventure-related code removed
 
 /**
  * Character background generator options
@@ -65,6 +57,39 @@ export const generateCharacterBackground = async (options: BackgroundOptions) =>
     console.error("Failed to generate character background:", error);
     if (axios.isAxiosError(error) && error.response) {
       throw new Error(error.response.data.error || "Failed to generate character background");
+    }
+    throw new Error("Cannot connect to AI GM service");
+  }
+};
+
+/**
+ * Character portrait generator options
+ */
+export interface PortraitOptions {
+  name: string;
+  race: string;
+  class: string;
+  gender: string;
+  style: string;
+  features: string[];
+}
+
+/**
+ * Generate character portrait image
+ * @param options Character details and portrait preferences
+ * @returns Generated portrait URL and character info
+ */
+export const generateCharacterPortrait = async (options: PortraitOptions) => {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/character-portrait/`, 
+      options
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to generate character portrait:", error);
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error || "Failed to generate character portrait");
     }
     throw new Error("Cannot connect to AI GM service");
   }

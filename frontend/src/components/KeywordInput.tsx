@@ -3,14 +3,19 @@ import React, { useState, KeyboardEvent, useRef } from "react";
 interface KeywordInputProps {
   value: string[];
   onChange: (keywords: string[]) => void;
+  suggestions?: string[]; // 支持自定义建议列表
 }
 
-const KeywordInput: React.FC<KeywordInputProps> = ({ value, onChange }) => {
+const KeywordInput: React.FC<KeywordInputProps> = ({
+  value,
+  onChange,
+  suggestions: customSuggestions,
+}) => {
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // 预设的关键词选项
-  const suggestions = [
+  // 预设的关键词选项，如果提供了自定义建议则使用自定义建议
+  const suggestions = customSuggestions || [
     "mysterious past",
     "orphan",
     "royal lineage",

@@ -1,23 +1,23 @@
 import React from "react";
-import BackgroundForm from "./BackgroundForm";
+import PortraitForm from "./PortraitForm";
 import { CharacterData } from "../types/character";
 
-interface BackgroundDialogProps {
+interface PortraitDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onGenerated: (background: string) => void;
+  onGenerated: (portraitUrl: string) => void;
   initialData?: CharacterData;
   onSaveCharacter?: (data: CharacterData) => void;
-  openPortraitDialog?: () => void;
+  openBackgroundDialog?: () => void;
 }
 
-const BackgroundDialog: React.FC<BackgroundDialogProps> = ({
+const PortraitDialog: React.FC<PortraitDialogProps> = ({
   isOpen,
   onClose,
   onGenerated,
   initialData,
   onSaveCharacter,
-  openPortraitDialog,
+  openBackgroundDialog,
 }) => {
   if (!isOpen) return null;
 
@@ -32,12 +32,12 @@ const BackgroundDialog: React.FC<BackgroundDialogProps> = ({
       {/* Dialog */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div className="max-w-xl w-full bg-base-100 rounded-lg shadow-xl">
-          <BackgroundForm
+          <PortraitForm
             onGenerated={onGenerated}
             onClose={onClose}
             initialData={initialData}
             onSaveCharacter={onSaveCharacter}
-            openPortraitDialog={openPortraitDialog}
+            openBackgroundDialog={openBackgroundDialog}
           />
         </div>
       </div>
@@ -45,4 +45,4 @@ const BackgroundDialog: React.FC<BackgroundDialogProps> = ({
   );
 };
 
-export default BackgroundDialog;
+export default PortraitDialog;
