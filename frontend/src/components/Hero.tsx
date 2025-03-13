@@ -50,7 +50,7 @@ const Hero: React.FC = () => {
         <div className="rounded-3xl overflow-hidden shadow-lg">
           <div
             className="hero h-[75vh] bg-cover bg-center "
-            style={{ backgroundImage: `url('./images/HeroSectionBG04.jpg')` }}
+            style={{ backgroundImage: `url('./images/HeroSectionBG07.jpg')` }}
           >
             <div className="hero-overlay bg-opacity-50"></div>
             <div className="hero-content text-center text-neutral-content z-10">

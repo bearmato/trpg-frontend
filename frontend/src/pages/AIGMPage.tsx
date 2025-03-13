@@ -259,19 +259,29 @@ const AIGMPage: React.FC = () => {
     if (!activeChatId) {
       createNewChatSession();
       setTimeout(() => {
+        // 创建一个纯文本消息
         const gmMessage: Message = {
           role: "gm",
-          text: `I've created a character portrait for you!\n\n![Character Portrait](${portraitUrl})`,
+          text: "我已经为你创建了一个角色立绘！",
+          timestamp: new Date(),
+        };
+
+        // 添加一个系统消息，包含HTML图片元素
+        const imageMessage: Message = {
+          role: "system",
+          text: `<div class="portrait-container w-full flex justify-center my-4">
+            <img src="${portraitUrl}" alt="角色立绘" class="max-w-xs rounded-lg shadow-lg border-2 border-primary" />
+          </div>`,
           timestamp: new Date(),
         };
 
         const actionMessage: Message = {
           role: "system",
-          text: "Would you like to generate a background story for this character?",
+          text: "你想为这个角色生成背景故事吗？",
           timestamp: new Date(),
           actions: [
             {
-              label: "Generate Character Background",
+              label: "生成角色背景",
               action: "generate_background",
               style: "primary",
             },
@@ -282,23 +292,37 @@ const AIGMPage: React.FC = () => {
           (session) => session.id === activeChatId
         );
         if (activeChat) {
-          updateActiveChat([...activeChat.messages, gmMessage, actionMessage]);
+          updateActiveChat([
+            ...activeChat.messages,
+            gmMessage,
+            imageMessage,
+            actionMessage,
+          ]);
         }
       }, 100);
     } else {
       const gmMessage: Message = {
         role: "gm",
-        text: `I've created a character portrait for you!\n\n![Character Portrait](${portraitUrl})`,
+        text: "我已经为你创建了一个角色立绘！",
+        timestamp: new Date(),
+      };
+
+      // 添加一个系统消息，包含HTML图片元素
+      const imageMessage: Message = {
+        role: "system",
+        text: `<div class="portrait-container w-full flex justify-center my-4">
+          <img src="${portraitUrl}" alt="角色立绘" class="max-w-xs rounded-lg shadow-lg border-2 border-primary" />
+        </div>`,
         timestamp: new Date(),
       };
 
       const actionMessage: Message = {
         role: "system",
-        text: "Would you like to generate a background story for this character?",
+        text: "你想为这个角色生成背景故事吗？",
         timestamp: new Date(),
         actions: [
           {
-            label: "Generate Character Background",
+            label: "生成角色背景",
             action: "generate_background",
             style: "primary",
           },
@@ -306,7 +330,12 @@ const AIGMPage: React.FC = () => {
       };
 
       const activeMessages = getActiveMessages();
-      updateActiveChat([...activeMessages, gmMessage, actionMessage]);
+      updateActiveChat([
+        ...activeMessages,
+        gmMessage,
+        imageMessage,
+        actionMessage,
+      ]);
     }
 
     // 如果已经有背景故事，生成完整的角色汇总
@@ -329,26 +358,40 @@ const AIGMPage: React.FC = () => {
     )
       return;
 
-    const characterSummary = `
-# ${characterData.name || "Unnamed Character"}
-**Race:** ${characterData.race}
-**Class:** ${characterData.class}
-${characterData.gender ? `**Gender:** ${characterData.gender}` : ""}
-
-![Character Portrait](${characterData.portraitUrl})
-
-## Background Story
-${characterData.background}
-  `;
-
-    const gmMessage: Message = {
+    // 创建角色基本信息的消息
+    const characterInfoMessage: Message = {
       role: "gm",
-      text: characterSummary,
+      text: `# ${characterData.name || "无名角色"}
+**种族:** ${characterData.race}
+**职业:** ${characterData.class}
+${characterData.gender ? `**性别:** ${characterData.gender}` : ""}`,
+      timestamp: new Date(),
+    };
+
+    // 创建一个单独的消息用于显示立绘
+    const portraitMessage: Message = {
+      role: "system",
+      text: `<div class="portrait-container w-full flex justify-center my-4">
+        <img src="${characterData.portraitUrl}" alt="角色立绘" class="max-w-xs rounded-lg shadow-lg border-2 border-primary" />
+      </div>`,
+      timestamp: new Date(),
+    };
+
+    // 创建一个单独的消息用于背景故事
+    const backgroundMessage: Message = {
+      role: "gm",
+      text: `## 背景故事
+${characterData.background}`,
       timestamp: new Date(),
     };
 
     const activeMessages = getActiveMessages();
-    updateActiveChat([...activeMessages, gmMessage]);
+    updateActiveChat([
+      ...activeMessages,
+      characterInfoMessage,
+      portraitMessage,
+      backgroundMessage,
+    ]);
 
     // 重置角色数据
     setCharacterData({

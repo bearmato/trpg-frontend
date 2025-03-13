@@ -7,8 +7,8 @@ export interface MessageAction {
 
 // 消息类型定义
 export interface Message {
-  role: "player" | "gm" | "system";  // 添加系统消息类型
-  text: string;
+  role: "player" | "gm" | "system";  // 系统消息可用于UI元素
+  text: string;  // 可以包含HTML（系统消息）或纯文本
   timestamp: Date;
   actions?: MessageAction[];  // 可选的按钮动作
 }

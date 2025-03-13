@@ -121,13 +121,18 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
                       : "chat-bubble bg-primary text-primary-content"
                   }`}
                 >
-                  {/* 支持简单的文本格式化，如换行 */}
-                  {msg.text.split("\n").map((line, i) => (
-                    <React.Fragment key={i}>
-                      {line}
-                      {i < msg.text.split("\n").length - 1 && <br />}
-                    </React.Fragment>
-                  ))}
+                  {/* 判断消息内容是否包含HTML标签 */}
+                  {msg.text.trim().startsWith("<") ? (
+                    <div dangerouslySetInnerHTML={{ __html: msg.text }} />
+                  ) : (
+                    /* 支持简单的文本格式化，如换行 */
+                    msg.text.split("\n").map((line, i) => (
+                      <React.Fragment key={i}>
+                        {line}
+                        {i < msg.text.split("\n").length - 1 && <br />}
+                      </React.Fragment>
+                    ))
+                  )}
                 </div>
               )}
 
