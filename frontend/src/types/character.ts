@@ -26,20 +26,7 @@ export interface Character {
   stats: CharacterStats;
   skillProficiencies: string[];
   equipment: string[];
-  spells: { // 法术
-    cantrips: string[];
-    level1: string[];
-    level2: string[];
-    level3: string[];
-    level4: string[];
-    level5: string[];
-    level6: string[];
-    level7: string[];
-    level8: string[];
-    level9: string[];
-  };
-  spellsKnown: number; // 已知法术数量
-  spellSlots: Record<string, number>; // 法术位，键为"level1"等，值为数量
+  // 移除了法术相关的字段
 }
 
 // 计算调整值工具函数
@@ -47,20 +34,22 @@ export const calculateModifier = (value: number): number => {
   return Math.floor((value - 10) / 2);
 };
 
-// 判断职业是否是施法者
+// 判断职业是否是施法者 - 保留此函数以便将来可能重新添加法术功能
 export const isSpellcaster = (characterClass: string): boolean => {
+  if (!characterClass) return false;
+  
   const spellcasterClasses = [
-    "法师", "Wizard",
-    "牧师", "Cleric",
-    "术士", "Sorcerer", 
-    "吟游诗人", "Bard",
-    "德鲁伊", "Druid",
-    "邪术师", "Warlock"
+    "法师", "Wizard", "法师 (Wizard)",
+    "牧师", "Cleric", "牧师 (Cleric)",
+    "术士", "Sorcerer", "术士 (Sorcerer)",
+    "吟游诗人", "Bard", "吟游诗人 (Bard)",
+    "德鲁伊", "Druid", "德鲁伊 (Druid)",
+    "邪术师", "Warlock", "邪术师 (Warlock)"
   ];
   
-  // 检查职业名称是否包含任何施法者职业
   return spellcasterClasses.some(casterClass => 
-    characterClass.includes(casterClass)
+    characterClass === casterClass || 
+    characterClass.toLowerCase().includes(casterClass.toLowerCase())
   );
 };
 
@@ -86,7 +75,18 @@ export const SUBRACES: Record<string, string[]> = {
   "半精灵 (Half-Elf)": ["标准"],
   "半兽人 (Half-Orc)": ["标准"],
   "提夫林 (Tiefling)": ["标准"],
-  "龙裔 (Dragonborn)": ["黑龙", "蓝龙", "绿龙", "红龙", "白龙", "金龙", "银龙", "铜龙", "青铜龙", "黄铜龙"],
+  "龙裔 (Dragonborn)": [
+    "黑龙",
+    "蓝龙",
+    "绿龙",
+    "红龙",
+    "白龙",
+    "金龙",
+    "银龙",
+    "铜龙",
+    "青铜龙",
+    "黄铜龙",
+  ],
 };
 
 export const CLASSES = [

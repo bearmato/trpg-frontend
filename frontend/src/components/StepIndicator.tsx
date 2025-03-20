@@ -6,26 +6,15 @@ interface StepIndicatorProps {
   currentStep: number;
   setCurrentStep: (step: number) => void;
   totalSteps?: number; // 可选的总步骤数
-  isSpellcaster?: boolean; // 是否是施法者
 }
 
 const StepIndicator: React.FC<StepIndicatorProps> = ({
   currentStep,
   setCurrentStep,
   totalSteps = 7,
-  isSpellcaster = false,
 }) => {
   // 基本步骤标签
-  let steps = ["基本信息", "种族", "职业", "背景", "属性"];
-
-  // 如果是施法者，插入法术步骤
-  if (isSpellcaster) {
-    steps.push("法术");
-  }
-
-  // 添加剩余步骤
-  steps.push("技能");
-  steps.push("完成");
+  let steps = ["基本信息", "种族", "职业", "背景", "属性", "技能", "完成"];
 
   return (
     <ul className="steps steps-vertical lg:steps-horizontal w-full">
