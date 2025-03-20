@@ -180,13 +180,21 @@ const CharacterCreationPage: React.FC = () => {
         );
       case 5:
         return (
-          <AbilityScoresStep stats={character.stats} updateStat={updateStat} />
+          <AbilityScoresStep
+            stats={character.stats}
+            updateStat={updateStat}
+            race={character.race}
+            subrace={character.subrace}
+          />
         );
+
       case 6:
         return (
           <SkillsStep
             skillProficiencies={character.skillProficiencies}
             toggleSkill={toggleSkill}
+            characterClass={character.characterClass} // Pass character class
+            background={character.background} // Pass background
           />
         );
       case 7:
