@@ -7,9 +7,10 @@ import ClassSelectionStep from "../steps/ClassSelectionStep";
 import BackgroundStep from "../steps/BackgroundStep";
 import AbilityScoresStep from "../steps/AbilityScoresStep";
 import SkillsStep from "../steps/SkillsStep";
+import SpellSelectionStep from "../steps/SpellSelectionStep"; // 新增法术选择步骤
 import CompletionStep from "../steps/CompletionStep";
 import StepIndicator from "../components/StepIndicator";
-import { Character, CharacterStats } from "../types/character";
+import { Character, CharacterStats, isSpellcaster } from "../types/character";
 
 const CharacterCreationPage: React.FC = () => {
   // 当前步骤状态
@@ -21,8 +22,14 @@ const CharacterCreationPage: React.FC = () => {
     race: "",
     subrace: "",
     characterClass: "",
+    subclass: "", // 新增子职业
     level: 1,
     background: "",
+    backgroundStory: "", // 新增背景故事
+    personality: "", // 个性特点
+    ideal: "", // 理想
+    bond: "", // 羁绊
+    flaw: "", // 缺点
     alignment: "",
     stats: {
       strength: 10,
@@ -34,6 +41,21 @@ const CharacterCreationPage: React.FC = () => {
     },
     skillProficiencies: [],
     equipment: [],
+    spells: {
+      // 法术
+      cantrips: [],
+      level1: [],
+      level2: [],
+      level3: [],
+      level4: [],
+      level5: [],
+      level6: [],
+      level7: [],
+      level8: [],
+      level9: [],
+    },
+    spellsKnown: 0, // 已知法术数量
+    spellSlots: {}, // 法术位
   });
 
   // 更新角色信息
@@ -44,9 +66,17 @@ const CharacterCreationPage: React.FC = () => {
     }));
   };
 
+  // 更新所有属性值（用于属性生成方法切换）
+  const updateStats = (newStats: CharacterStats) => {
+    setCharacter((prev) => ({
+      ...prev,
+      stats: newStats,
+    }));
+  };
+
   // 更新角色属性
   const updateStat = (stat: keyof CharacterStats, value: number) => {
-    if (value >= 3 && value <= 18) {
+    if (value >= 3 && value <= 20) {
       setCharacter((prev) => ({
         ...prev,
         stats: {
@@ -70,6 +100,43 @@ const CharacterCreationPage: React.FC = () => {
         return {
           ...prev,
           skillProficiencies: [...skills, skill],
+        };
+      }
+    });
+  };
+
+  // 添加或移除法术
+  const toggleSpell = (spell: string, level: string) => {
+    setCharacter((prev) => {
+      const spellList = [
+        ...(prev.spells[level as keyof typeof prev.spells] || []),
+      ];
+
+      if (spellList.includes(spell)) {
+        return {
+          ...prev,
+          spells: {
+            ...prev.spells,
+            [level]: spellList.filter((s) => s !== spell),
+          },
+        };
+      } else {
+        // 检查是否达到已知法术上限
+        if (level !== "cantrips") {
+          // 计算已知法术总数
+          const totalKnownSpells = Object.entries(prev.spells)
+            .filter(([key]) => key !== "cantrips")
+            .reduce((sum, [_, spells]) => sum + (spells as string[]).length, 0);
+
+          if (totalKnownSpells >= prev.spellsKnown) return prev;
+        }
+
+        return {
+          ...prev,
+          spells: {
+            ...prev.spells,
+            [level]: [...spellList, spell],
+          },
         };
       }
     });
@@ -110,6 +177,43 @@ const CharacterCreationPage: React.FC = () => {
     }
   };
 
+  // 处理职业变更，设置初始法术数量
+  const handleClassChange = (newClass: string) => {
+    updateCharacter("characterClass", newClass);
+
+    // 根据职业设置初始法术数量
+    let spellsKnown = 0;
+    let spellSlots = {};
+
+    if (isSpellcaster(newClass)) {
+      switch (newClass) {
+        case "法师 (Wizard)":
+          spellsKnown = 6; // 1级法师可记录6个1级法术（不包括仪式）
+          spellSlots = { level1: 2 }; // 1级法师有2个1级法术位
+          break;
+        case "术士 (Sorcerer)":
+          spellsKnown = 2; // 1级术士认识2个法术
+          spellSlots = { level1: 2 }; // 1级术士有2个1级法术位
+          break;
+        case "牧师 (Cleric)":
+          // 牧师准备法术而不是学习，准备数量 = 等级 + 感知调整值
+          spellSlots = { level1: 2 }; // 1级牧师有2个1级法术位
+          break;
+        case "圣武士 (Paladin)":
+        case "游侠 (Ranger)":
+          // 这些职业在较高等级才获得法术能力
+          break;
+        case "吟游诗人 (Bard)":
+          spellsKnown = 4; // 1级吟游诗人认识4个法术
+          spellSlots = { level1: 2 }; // 1级吟游诗人有2个1级法术位
+          break;
+      }
+    }
+
+    updateCharacter("spellsKnown", spellsKnown);
+    updateCharacter("spellSlots", spellSlots);
+  };
+
   // 保存角色
   const saveCharacter = () => {
     console.log("保存角色:", character);
@@ -119,11 +223,30 @@ const CharacterCreationPage: React.FC = () => {
 
   // 步骤控制
   const nextStep = () => {
-    setCurrentStep((prev) => prev + 1);
+    // 如果是施法者且当前是属性步骤，则添加法术选择步骤
+    if (isSpellcaster(character.characterClass) && currentStep === 5) {
+      setCurrentStep(6); // 进入法术选择步骤
+    } else if (isSpellcaster(character.characterClass) && currentStep === 6) {
+      setCurrentStep(7); // 施法者从法术步骤进入技能步骤
+    } else {
+      setCurrentStep((prev) => prev + 1);
+    }
   };
 
   const prevStep = () => {
-    setCurrentStep((prev) => prev - 1);
+    // 如果是施法者且当前是技能步骤，则返回法术选择
+    if (isSpellcaster(character.characterClass) && currentStep === 7) {
+      setCurrentStep(6); // 返回法术选择步骤
+    } else if (isSpellcaster(character.characterClass) && currentStep === 6) {
+      setCurrentStep(5); // 施法者从法术步骤返回属性步骤
+    } else {
+      setCurrentStep((prev) => prev - 1);
+    }
+  };
+
+  // 获取总步骤数
+  const getTotalSteps = () => {
+    return isSpellcaster(character.characterClass) ? 8 : 7;
   };
 
   // 检查当前步骤是否完成
@@ -139,7 +262,19 @@ const CharacterCreationPage: React.FC = () => {
         return !!character.background && !!character.alignment;
       case 5: // 属性分配
         return true; // 属性有默认值，所以总是完成的
-      case 6: // 技能选择
+      case 6: // 法术选择（仅施法者）
+        if (isSpellcaster(character.characterClass)) {
+          // 确保至少选择了一个法术
+          const hasCantrips = character.spells.cantrips.length > 0;
+          const hasSpells =
+            character.level >= 1 &&
+            Object.entries(character.spells)
+              .filter(([key]) => key !== "cantrips")
+              .some(([_, spells]) => (spells as string[]).length > 0);
+          return hasCantrips || hasSpells;
+        }
+        return true; // 非施法者跳过此步骤
+      case 7: // 技能选择
         return character.skillProficiencies.length >= 2; // 至少选择2个技能
       default:
         return true;
@@ -148,7 +283,13 @@ const CharacterCreationPage: React.FC = () => {
 
   // 根据当前步骤渲染内容
   const renderStep = () => {
-    switch (currentStep) {
+    // 确定当前步骤（考虑施法者额外步骤）
+    const adjustedStep =
+      currentStep > 6 && !isSpellcaster(character.characterClass)
+        ? currentStep - 1 // 非施法者跳过法术步骤
+        : currentStep;
+
+    switch (adjustedStep) {
       case 1:
         return (
           <BasicInfoStep
@@ -168,7 +309,7 @@ const CharacterCreationPage: React.FC = () => {
         return (
           <ClassSelectionStep
             character={character}
-            updateCharacter={updateCharacter}
+            updateCharacter={handleClassChange}
           />
         );
       case 4:
@@ -183,21 +324,25 @@ const CharacterCreationPage: React.FC = () => {
           <AbilityScoresStep
             stats={character.stats}
             updateStat={updateStat}
+            updateStats={updateStats}
             race={character.race}
             subrace={character.subrace}
           />
         );
-
       case 6:
+        return (
+          <SpellSelectionStep character={character} toggleSpell={toggleSpell} />
+        );
+      case 7:
         return (
           <SkillsStep
             skillProficiencies={character.skillProficiencies}
             toggleSkill={toggleSkill}
-            characterClass={character.characterClass} // Pass character class
-            background={character.background} // Pass background
+            characterClass={character.characterClass}
+            background={character.background}
           />
         );
-      case 7:
+      case 8:
         return <CompletionStep character={character} />;
       default:
         return null;
@@ -213,6 +358,8 @@ const CharacterCreationPage: React.FC = () => {
         <StepIndicator
           currentStep={currentStep}
           setCurrentStep={setCurrentStep}
+          totalSteps={getTotalSteps()}
+          isSpellcaster={isSpellcaster(character.characterClass)}
         />
       </div>
 
@@ -241,7 +388,7 @@ const CharacterCreationPage: React.FC = () => {
           </button>
         )}
 
-        {currentStep < 7 ? (
+        {currentStep < getTotalSteps() ? (
           <button
             className="btn btn-primary ml-auto"
             onClick={nextStep}

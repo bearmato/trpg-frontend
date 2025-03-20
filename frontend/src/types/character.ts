@@ -14,18 +14,54 @@ export interface Character {
   race: string;
   subrace: string;
   characterClass: string;
+  subclass: string; // 新增子职业
   level: number;
   background: string;
+  backgroundStory: string; // 新增背景故事
+  personality: string; // 个性特点
+  ideal: string; // 理想
+  bond: string; // 羁绊
+  flaw: string; // 缺点
   alignment: string;
   stats: CharacterStats;
   skillProficiencies: string[];
   equipment: string[];
-  portrait?: string;
+  spells: { // 法术
+    cantrips: string[];
+    level1: string[];
+    level2: string[];
+    level3: string[];
+    level4: string[];
+    level5: string[];
+    level6: string[];
+    level7: string[];
+    level8: string[];
+    level9: string[];
+  };
+  spellsKnown: number; // 已知法术数量
+  spellSlots: Record<string, number>; // 法术位，键为"level1"等，值为数量
 }
 
 // 计算调整值工具函数
 export const calculateModifier = (value: number): number => {
   return Math.floor((value - 10) / 2);
+};
+
+// 判断职业是否是施法者
+export const isSpellcaster = (characterClass: string): boolean => {
+  const spellcasterClasses = [
+    "法师", "Wizard",
+    "牧师", "Cleric",
+    "术士", "Sorcerer", 
+    "吟游诗人", "Bard",
+    "德鲁伊", "Druid",
+    "邪术师", "Warlock"
+  ];
+  
+  // 检查职业名称是否包含任何施法者职业
+  return spellcasterClasses.some(casterClass => 
+    characterClass.includes(casterClass)
+  );
 };
 
 // 预设数据 - 可以在需要的地方导入使用
