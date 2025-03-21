@@ -2,57 +2,51 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/gradient-text-animation.css"; // 导入渐变文字动画样式
 
+// 导入图标
+import aigmLogo from "../assets/logo/aigmlogo.png";
+import characterLogo from "../assets/logo/characterLogo.png";
+import mapmakerLogo from "../assets/logo/mapmakerLogo.png";
+import ruleLogo from "../assets/logo/rulelogo.png";
+
 const Hero: React.FC = () => {
-  // 功能卡片数据 - 使用中文描述以与参考图一致
+  // 功能卡片数据 - 只保留四个主要功能
   const features = [
     {
       title: "Rules",
       description: "快速访问和下载D&D 5e的规则书和参考资料,掌握游戏核心机制",
-      image: "./images/rules-feature.jpg",
+      iconSrc: ruleLogo,
       link: "/rules",
     },
     {
       title: "AI GM",
       description: "让AI作为你的游戏大师,创建和管理你的桌面角色扮演游戏",
-      image: "./images/aigm-feature.jpg",
+      iconSrc: aigmLogo,
       link: "/ai-gm",
     },
     {
       title: "Map Generator",
       description: "随机生成精美的战役地图和场景,为你的冒险增添视觉体验",
-      image: "./images/map-feature.jpg",
+      iconSrc: mapmakerLogo,
       link: "/map-generator",
-    },
-    {
-      title: "Background",
-      description: "创建丰富多彩的角色背景故事,增加你角色的深度和个性",
-      image: "./images/background-feature.jpg",
-      link: "/background",
     },
     {
       title: "Character Creation",
       description: "轻松创建和管理你的TRPG角色,自定义能力值和特性",
-      image: "./images/character-feature.jpg",
+      iconSrc: characterLogo,
       link: "/character-creation",
-    },
-    {
-      title: "Dice",
-      description: "虚拟骰子工具,支持各种TRPG常用骰子和复杂的掷骰表达式",
-      image: "./images/dice-feature.jpg",
-      link: "/dice",
     },
   ];
 
   return (
     <div>
       {/* 主Hero部分，增加了容器和圆角边框 */}
-      <div className="container-fluid max-w-[95%] mx-auto mt-4 ">
+      <div className="container-fluid max-w-[95%] mx-auto mt-4">
         <div className="rounded-3xl overflow-hidden shadow-lg">
           <div
-            className="hero h-[75vh] bg-cover bg-center "
+            className="hero h-[65vh] bg-cover bg-center "
             style={{ backgroundImage: `url('./images/HeroSectionBG07.jpg')` }}
           >
-            <div className="hero-overlay bg-opacity-50"></div>
+            <div className="hero-overlay bg-opacity-50  "></div>
             <div className="hero-content text-center text-neutral-content z-10">
               {/* 使用TRPG主题的渐变文字动画效果 */}
               <div className="relative max-w-lg">
@@ -76,36 +70,40 @@ const Hero: React.FC = () => {
         </div>
       </div>
 
-      {/* 功能卡片区域 - 使用与参考图一致的设计 */}
-      <div className="bg-base-100 pt-8 pb-16">
+      {/* 功能卡片区域  */}
+      <div className="bg-white pt-8 pb-16">
         <div className="container-fluid max-w-[90%] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <Link
                 to={feature.link}
                 key={index}
-                className="overflow-hidden flex flex-col bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow"
+                className="overflow-hidden flex flex-col bg-base-200 rounded-lg shadow-md hover:shadow-xl transition-all duration-300"
               >
-                {/* 图片区域 */}
-                <div className="w-full rounded-t-lg overflow-hidden">
-                  <img
-                    src={feature.image}
-                    alt={feature.title}
-                    className="w-full h-52 object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.onerror = null;
-                      target.src = `https://placehold.co/600x400/e2e8f0/a3171e?text=${feature.title}`;
-                    }}
-                  />
+                {/* 圆形PNG图标区域 - 大尺寸图标 */}
+                <div className="w-full flex justify-center pt-8 pb-6">
+                  <div className="w-40 h-40 rounded-full bg-gradient-to-br from-[#A31D1D] to-[#d24545] flex items-center justify-center shadow-lg transform hover:scale-105 transition-transform duration-300 p-3 border-4 border-white">
+                    <img
+                      src={feature.iconSrc}
+                      alt={`${feature.title} 图标`}
+                      className="w-24 h-24 object-contain filter brightness-0 invert"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.onerror = null;
+                        target.src = `https://placehold.co/120x120/ffffff/A31D1D?text=${feature.title[0]}`;
+                      }}
+                    />
+                  </div>
                 </div>
 
                 {/* 内容区域 */}
-                <div className="p-6 bg-base-200 flex-grow">
-                  <h3 className="text-2xl font-bold text-[#A31D1D] mb-2">
+                <div className="p-6 bg-base-100 flex-grow">
+                  <h3 className="text-2xl font-bold text-[#A31D1D] mb-3 text-center">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-700">{feature.description}</p>
+                  <p className="text-gray-700 text-center leading-relaxed">
+                    {feature.description}
+                  </p>
                 </div>
               </Link>
             ))}
