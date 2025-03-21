@@ -71,14 +71,14 @@ const Hero: React.FC = () => {
       </div>
 
       {/* 功能卡片区域  */}
-      <div className="bg-white pt-8 pb-16">
+      <div className="bg-base-100 pt-8 pb-16">
         <div className="container-fluid max-w-[90%] mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <Link
                 to={feature.link}
                 key={index}
-                className="overflow-hidden flex flex-col bg-base-200 rounded-lg shadow-md hover:shadow-xl transition-all duration-300"
+                className="overflow-hidden flex flex-col bg-[#f0e2cb] rounded-lg shadow-md hover:shadow-xl transition-all duration-300"
               >
                 {/* 圆形PNG图标区域 - 大尺寸图标 */}
                 <div className="w-full flex justify-center pt-8 pb-6">
@@ -97,7 +97,7 @@ const Hero: React.FC = () => {
                 </div>
 
                 {/* 内容区域 */}
-                <div className="p-6 bg-base-100 flex-grow">
+                <div className="p-6 bg-base-200 flex-grow">
                   <h3 className="text-2xl font-bold text-[#A31D1D] mb-3 text-center">
                     {feature.title}
                   </h3>
