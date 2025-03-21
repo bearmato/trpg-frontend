@@ -28,7 +28,9 @@ export const sendMessageToAIGM = async (
   }
 };
 
-// Adventure-related code removed
+// 更新后的接口定义，增加背景和阵营参数
+
+// 更新后的接口定义，增加语言选择参数
 
 /**
  * Character background generator options
@@ -37,8 +39,11 @@ export interface BackgroundOptions {
   name: string;
   race: string;
   class: string;
+  background: string;
+  alignment: string;
   keywords: string[];
   tone: string;
+  language: string; // 新增：语言选择参数
 }
 
 /**
@@ -61,13 +66,13 @@ export const generateCharacterBackground = async (options: BackgroundOptions) =>
     throw new Error("Cannot connect to AI GM service");
   }
 };
-
 /**
  * Character portrait generator options
  */
 export interface PortraitOptions {
   name: string;
   race: string;
+  subrace?: string;  // 添加亚种信息
   class: string;
   gender: string;
   style: string;
