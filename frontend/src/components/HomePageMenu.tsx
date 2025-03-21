@@ -12,9 +12,9 @@ const HomePageMenu = () => {
       <li>
         <Link to="/map-generator">map generater</Link>
       </li>
-      <li>
+      {/* <li>
         <Link to="/background">background</Link>
-      </li>
+      </li> */}
       <li>
         <Link to="/character-creation">character-creation</Link>
       </li>
