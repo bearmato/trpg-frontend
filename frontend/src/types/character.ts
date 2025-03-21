@@ -14,19 +14,21 @@ export interface Character {
   race: string;
   subrace: string;
   characterClass: string;
-  subclass: string; // 新增子职业
+  subclass: string;
   level: number;
   background: string;
-  backgroundStory: string; // 新增背景故事
+  backgroundStory: string; // 背景故事
   personality: string; // 个性特点
   ideal: string; // 理想
   bond: string; // 羁绊
   flaw: string; // 缺点
   alignment: string;
+  gender: string; // 新增：性别
+  features: string[]; // 新增：外貌特征
+  portraitUrl: string; // 新增：角色立绘URL
   stats: CharacterStats;
   skillProficiencies: string[];
   equipment: string[];
-  // 移除了法术相关的字段
 }
 
 // 计算调整值工具函数

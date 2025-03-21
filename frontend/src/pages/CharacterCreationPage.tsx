@@ -7,6 +7,7 @@ import ClassSelectionStep from "../steps/ClassSelectionStep";
 import BackgroundStep from "../steps/BackgroundStep";
 import AbilityScoresStep from "../steps/AbilityScoresStep";
 import SkillsStep from "../steps/SkillsStep";
+import PortraitStep from "../steps/PortraitStep";
 import CompletionStep from "../steps/CompletionStep";
 import StepIndicator from "../components/StepIndicator";
 import { Character, CharacterStats } from "../types/character";
@@ -21,15 +22,18 @@ const CharacterCreationPage: React.FC = () => {
     race: "",
     subrace: "",
     characterClass: "",
-    subclass: "", // 新增子职业
+    subclass: "",
     level: 1,
     background: "",
-    backgroundStory: "", // 新增背景故事
+    backgroundStory: "", // 背景故事
     personality: "", // 个性特点
     ideal: "", // 理想
     bond: "", // 羁绊
     flaw: "", // 缺点
     alignment: "",
+    gender: "male", // 默认性别
+    features: [], // 外貌特征
+    portraitUrl: "", // 角色立绘URL
     stats: {
       strength: 10,
       dexterity: 10,
@@ -147,7 +151,7 @@ const CharacterCreationPage: React.FC = () => {
 
   // 获取总步骤数
   const getTotalSteps = () => {
-    return 7; // 总共7个步骤，移除了法术步骤
+    return 8; // 总共8个步骤，包括立绘步骤
   };
 
   // 检查当前步骤是否完成
@@ -165,6 +169,8 @@ const CharacterCreationPage: React.FC = () => {
         return true; // 属性有默认值，所以总是完成的
       case 6: // 技能选择
         return character.skillProficiencies.length >= 2; // 至少选择2个技能
+      case 7: // 角色立绘
+        return true; // 立绘是可选的，不强制要求
       default:
         return true;
     }
@@ -222,6 +228,13 @@ const CharacterCreationPage: React.FC = () => {
           />
         );
       case 7:
+        return (
+          <PortraitStep
+            character={character}
+            updateCharacter={updateCharacter}
+          />
+        );
+      case 8:
         return <CompletionStep character={character} />;
       default:
         return null;
