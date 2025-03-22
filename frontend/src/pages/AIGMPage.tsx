@@ -2,12 +2,9 @@ import React, { useState, useEffect } from "react";
 import { sendMessageToAIGM } from "../api/aigm";
 import { useDiceWidget } from "../components/DiceWidgetProvider";
 import { Message, ChatSession } from "../types/chat";
-import { CharacterData } from "../types/character";
 import ChatSideBar from "../components/ChatSideBar";
 import ChatWindow from "../components/ChatWindow";
 import ChatInput from "../components/ChatInput";
-import BackgroundDialog from "../components/BackgroundDialog";
-import PortraitDialog from "../components/PortraitDialog";
 
 // 生成唯一ID
 const generateId = () => {
@@ -34,19 +31,6 @@ const AIGMPage: React.FC = () => {
 
   // 获取骰子功能
   const { toggleDrawer } = useDiceWidget();
-
-  // 背景生成对话框状态
-  const [isBackgroundDialogOpen, setIsBackgroundDialogOpen] = useState(false);
-
-  // 角色立绘对话框状态
-  const [isPortraitDialogOpen, setIsPortraitDialogOpen] = useState(false);
-
-  // 角色数据状态
-  const [characterData, setCharacterData] = useState<CharacterData>({
-    name: "",
-    race: "",
-    class: "",
-  });
 
   // 组件挂载时，加载保存的聊天会话
   useEffect(() => {
@@ -185,220 +169,8 @@ const AIGMPage: React.FC = () => {
 
   // 处理消息中的按钮动作
   const handleMessageAction = (action: string) => {
-    switch (action) {
-      case "generate_portrait":
-        setIsPortraitDialogOpen(true);
-        break;
-      case "generate_background":
-        setIsBackgroundDialogOpen(true);
-        break;
-      default:
-        console.log("Unknown action:", action);
-    }
-  };
-
-  // 处理背景生成结果
-  const handleBackgroundGenerated = (background: string) => {
-    if (!activeChatId) {
-      createNewChatSession();
-      // 需要等待新会话创建
-      setTimeout(() => {
-        const gmMessage: Message = {
-          role: "gm",
-          text: `Here's the character background I generated for you:\n\n${background}`,
-          timestamp: new Date(),
-        };
-
-        const actionMessage: Message = {
-          role: "system",
-          text: "Would you like to generate a matching portrait for this character?",
-          timestamp: new Date(),
-          actions: [
-            {
-              label: "Generate Character Portrait",
-              action: "generate_portrait",
-              style: "primary",
-            },
-          ],
-        };
-
-        const activeChat = chatSessions.find(
-          (session) => session.id === activeChatId
-        );
-        if (activeChat) {
-          updateActiveChat([...activeChat.messages, gmMessage, actionMessage]);
-        }
-      }, 100);
-    } else {
-      const gmMessage: Message = {
-        role: "gm",
-        text: `Here's the character background I generated for you:\n\n${background}`,
-        timestamp: new Date(),
-      };
-
-      const actionMessage: Message = {
-        role: "system",
-        text: "Would you like to generate a matching portrait for this character?",
-        timestamp: new Date(),
-        actions: [
-          {
-            label: "Generate Character Portrait",
-            action: "generate_portrait",
-            style: "primary",
-          },
-        ],
-      };
-
-      const activeMessages = getActiveMessages();
-      updateActiveChat([...activeMessages, gmMessage, actionMessage]);
-    }
-  };
-
-  // 处理立绘生成结果
-  const handlePortraitGenerated = (portraitUrl: string) => {
-    if (!activeChatId) {
-      createNewChatSession();
-      setTimeout(() => {
-        // 创建一个纯文本消息
-        const gmMessage: Message = {
-          role: "gm",
-          text: "我已经为你创建了一个角色立绘！",
-          timestamp: new Date(),
-        };
-
-        // 添加一个系统消息，包含HTML图片元素
-        const imageMessage: Message = {
-          role: "system",
-          text: `<div class="portrait-container w-full flex justify-center my-4">
-            <img src="${portraitUrl}" alt="角色立绘" class="max-w-xs rounded-lg shadow-lg border-2 border-primary" />
-          </div>`,
-          timestamp: new Date(),
-        };
-
-        const actionMessage: Message = {
-          role: "system",
-          text: "你想为这个角色生成背景故事吗？",
-          timestamp: new Date(),
-          actions: [
-            {
-              label: "生成角色背景",
-              action: "generate_background",
-              style: "primary",
-            },
-          ],
-        };
-
-        const activeChat = chatSessions.find(
-          (session) => session.id === activeChatId
-        );
-        if (activeChat) {
-          updateActiveChat([
-            ...activeChat.messages,
-            gmMessage,
-            imageMessage,
-            actionMessage,
-          ]);
-        }
-      }, 100);
-    } else {
-      const gmMessage: Message = {
-        role: "gm",
-        text: "我已经为你创建了一个角色立绘！",
-        timestamp: new Date(),
-      };
-
-      // 添加一个系统消息，包含HTML图片元素
-      const imageMessage: Message = {
-        role: "system",
-        text: `<div class="portrait-container w-full flex justify-center my-4">
-          <img src="${portraitUrl}" alt="角色立绘" class="max-w-xs rounded-lg shadow-lg border-2 border-primary" />
-        </div>`,
-        timestamp: new Date(),
-      };
-
-      const actionMessage: Message = {
-        role: "system",
-        text: "你想为这个角色生成背景故事吗？",
-        timestamp: new Date(),
-        actions: [
-          {
-            label: "生成角色背景",
-            action: "generate_background",
-            style: "primary",
-          },
-        ],
-      };
-
-      const activeMessages = getActiveMessages();
-      updateActiveChat([
-        ...activeMessages,
-        gmMessage,
-        imageMessage,
-        actionMessage,
-      ]);
-    }
-
-    // 如果已经有背景故事，生成完整的角色汇总
-    if (characterData.background) {
-      setTimeout(() => generateCompleteCharacter(), 500);
-    }
-  };
-
-  // 处理保存角色数据
-  const handleSaveCharacter = (data: CharacterData) => {
-    setCharacterData({ ...characterData, ...data });
-  };
-
-  // 生成完整角色信息
-  const generateCompleteCharacter = () => {
-    if (
-      !activeChatId ||
-      !characterData.background ||
-      !characterData.portraitUrl
-    )
-      return;
-
-    // 创建角色基本信息的消息
-    const characterInfoMessage: Message = {
-      role: "gm",
-      text: `# ${characterData.name || "无名角色"}
-**种族:** ${characterData.race}
-**职业:** ${characterData.class}
-${characterData.gender ? `**性别:** ${characterData.gender}` : ""}`,
-      timestamp: new Date(),
-    };
-
-    // 创建一个单独的消息用于显示立绘
-    const portraitMessage: Message = {
-      role: "system",
-      text: `<div class="portrait-container w-full flex justify-center my-4">
-        <img src="${characterData.portraitUrl}" alt="角色立绘" class="max-w-xs rounded-lg shadow-lg border-2 border-primary" />
-      </div>`,
-      timestamp: new Date(),
-    };
-
-    // 创建一个单独的消息用于背景故事
-    const backgroundMessage: Message = {
-      role: "gm",
-      text: `## 背景故事
-${characterData.background}`,
-      timestamp: new Date(),
-    };
-
-    const activeMessages = getActiveMessages();
-    updateActiveChat([
-      ...activeMessages,
-      characterInfoMessage,
-      portraitMessage,
-      backgroundMessage,
-    ]);
-
-    // 重置角色数据
-    setCharacterData({
-      name: "",
-      race: "",
-      class: "",
-    });
+    // 所有立绘和背景相关的动作都已移除
+    console.log("Unknown action:", action);
   };
 
   // 发送消息给AI GM
@@ -472,20 +244,7 @@ ${characterData.background}`,
         <div className="p-3 bg-base-200 shadow-sm border-b border-base-content/10">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold text-primary">AI Game Master</h1>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setIsPortraitDialogOpen(true)}
-                className="btn btn-sm btn-secondary"
-              >
-                Generate Portrait
-              </button>
-              <button
-                onClick={() => setIsBackgroundDialogOpen(true)}
-                className="btn btn-sm btn-primary"
-              >
-                Generate Background
-              </button>
-            </div>
+            {/* 所有生成按钮已移除 */}
           </div>
         </div>
 
@@ -506,32 +265,6 @@ ${characterData.background}`,
           disabled={!activeChatId}
         />
       </div>
-
-      {/* 背景生成对话框 */}
-      <BackgroundDialog
-        isOpen={isBackgroundDialogOpen}
-        onClose={() => setIsBackgroundDialogOpen(false)}
-        onGenerated={handleBackgroundGenerated}
-        initialData={characterData}
-        onSaveCharacter={handleSaveCharacter}
-        openPortraitDialog={() => {
-          setIsBackgroundDialogOpen(false);
-          setIsPortraitDialogOpen(true);
-        }}
-      />
-
-      {/* 角色立绘对话框 */}
-      <PortraitDialog
-        isOpen={isPortraitDialogOpen}
-        onClose={() => setIsPortraitDialogOpen(false)}
-        onGenerated={handlePortraitGenerated}
-        initialData={characterData}
-        onSaveCharacter={handleSaveCharacter}
-        openBackgroundDialog={() => {
-          setIsPortraitDialogOpen(false);
-          setIsBackgroundDialogOpen(true);
-        }}
-      />
     </div>
   );
 };

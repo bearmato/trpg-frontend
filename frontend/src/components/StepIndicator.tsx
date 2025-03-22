@@ -5,16 +5,16 @@ import React from "react";
 interface StepIndicatorProps {
   currentStep: number;
   setCurrentStep: (step: number) => void;
-  totalSteps?: number; // 可选的总步骤数
+  totalSteps: number; // 修改为必需参数，确保它被使用
 }
 
 const StepIndicator: React.FC<StepIndicatorProps> = ({
   currentStep,
   setCurrentStep,
-  totalSteps = 8,
+  totalSteps = 8, // 默认值保持不变
 }) => {
   // 基本步骤标签
-  let steps = [
+  const steps = [
     "基本信息",
     "种族",
     "职业",
@@ -23,7 +23,7 @@ const StepIndicator: React.FC<StepIndicatorProps> = ({
     "技能",
     "立绘",
     "完成",
-  ];
+  ].slice(0, totalSteps); // 使用传入的totalSteps来截取需要的步骤
 
   return (
     <ul className="steps steps-vertical lg:steps-horizontal w-full">
