@@ -18,9 +18,6 @@ const SkillsStep: React.FC<SkillsStepProps> = ({
 }) => {
   // 存储职业和背景可选的技能
   const [classSkillOptions, setClassSkillOptions] = useState<string[]>([]);
-  const [backgroundSkillOptions, setBackgroundSkillOptions] = useState<
-    string[]
-  >([]);
 
   // 职业允许选择的技能数量
   const [classSkillCount, setClassSkillCount] = useState(0);
