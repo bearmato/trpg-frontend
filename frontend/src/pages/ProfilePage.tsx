@@ -97,10 +97,14 @@ const ProfilePage: React.FC = () => {
         {profile && (
           <div className="flex flex-col items-center">
             <div className="avatar mb-6">
-              <div className="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+              <div className="w-24 rounded-full overflow-hidden ring ring-primary ring-offset-base-100 ring-offset-2">
                 <img
-                  src={profile.avatar || "https://via.placeholder.com/150"}
-                  alt={profile.username}
+                  src={profile?.avatar || "/images/avatars/default-avatar.png"}
+                  alt={profile?.username || "User profile"}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "/images/avatars/default-avatar.png";
+                  }}
                 />
               </div>
             </div>
@@ -119,7 +123,7 @@ const ProfilePage: React.FC = () => {
                     className="input input-bordered w-full"
                     value={avatar}
                     onChange={(e) => setAvatar(e.target.value)}
-                    placeholder="https://example.com/avatar.jpg"
+                    placeholder="/images/avatars/default-avatar.png"
                   />
                 </div>
 

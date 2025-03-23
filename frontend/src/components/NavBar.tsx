@@ -34,8 +34,15 @@ const NavBar = () => {
               role="button"
               className="btn btn-ghost btn-circle avatar"
             >
-              <div className="w-10 rounded-full">
-                <img alt="用户头像" src="https://via.placeholder.com/80" />
+              <div className="w-10 rounded-full overflow-hidden">
+                <img
+                  alt="Avatar"
+                  src={user?.avatar || "/images/avatars/default-avatar.png"}
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = "/images/avatars/default-avatar.png";
+                  }}
+                />
               </div>
             </div>
             <ul

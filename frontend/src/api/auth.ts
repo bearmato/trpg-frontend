@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const API_BASE_URL = "https://trpg-backend-production-fb60.up.railway.app";
+//const API_BASE_URL = "https://trpg-backend-production-fb60.up.railway.app";
+const API_BASE_URL = "http://127.0.0.1:8000";  
+
+
 
 export interface LoginCredentials {
   username: string;
@@ -17,6 +20,7 @@ export interface User {
   id: number;
   username: string;
   email: string;
+  avatar?: string;
 }
 
 export interface AuthResponse {
@@ -36,14 +40,25 @@ export interface Profile {
 // 注册新用户
 export const registerUser = async (userData: RegisterData): Promise<AuthResponse> => {
   try {
+    console.log("发送注册请求数据:", userData);
+    console.log("请求URL:", `${API_BASE_URL}/api/auth/register/`);
+    
     const response = await axios.post(`${API_BASE_URL}/api/auth/register/`, userData);
-    // 保存令牌到localStorage
+    
+    console.log("注册成功，响应数据:", response.data);
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("user", JSON.stringify(response.data.user));
     return response.data;
   } catch (error) {
+    console.error("注册失败，详细错误:", error);
     if (axios.isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "注册失败");
+      console.error("服务器响应:", error.response.data);
+      console.error("状态码:", error.response.status);
+      throw new Error(
+        typeof error.response.data === 'string' 
+          ? error.response.data 
+          : JSON.stringify(error.response.data) || "注册失败"
+      );
     }
     throw new Error("无法连接到服务器");
   }
