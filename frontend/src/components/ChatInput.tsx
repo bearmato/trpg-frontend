@@ -32,7 +32,7 @@ const ChatInput: React.FC<ChatInputProps> = ({
       <div className="max-w-4xl mx-auto bg-base-100 rounded-xl p-2 shadow-sm border border-base-300 flex items-center">
         <textarea
           className="textarea flex-1 mr-2 h-12 min-h-12 border-none focus:outline-none bg-transparent resize-none"
-          placeholder="输入你的行动或对话..."
+          placeholder="Enter your action or dialogue..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={handleKeyPress}

@@ -15,20 +15,21 @@ const BasicInfoStep: React.FC<BasicInfoStepProps> = ({
   return (
     <div className="card bg-base-100 shadow-xl">
       <div className="card-body">
-        <h2 className="card-title text-2xl mb-6">基本信息</h2>
+        <h2 className="card-title text-2xl mb-6">Basic Information</h2>
         <div className="form-control w-full max-w-md mx-auto">
           <label className="label">
-            <span className="label-text text-lg">角色名称</span>
+            <span className="label-text text-lg">Character Name</span>
           </label>
           <input
             type="text"
-            placeholder="输入你的角色名称"
+            placeholder="Enter your character's name"
             className="input input-bordered w-full"
             value={character.name}
             onChange={(e) => updateCharacter("name", e.target.value)}
           />
           <p className="text-sm text-gray-500 mt-2">
-            取一个符合游戏世界观的名字，这将是你在冒险中的称呼。
+            Choose a name that fits the game world's setting. This will be your
+            identity throughout your adventures.
           </p>
         </div>
       </div>

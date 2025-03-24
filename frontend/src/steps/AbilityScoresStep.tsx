@@ -81,7 +81,7 @@ const AbilityScoresStep: React.FC<AbilityScoresStepProps> = ({
     let bonuses: Partial<CharacterStats> = {};
 
     switch (race) {
-      case "人类 (Human)":
+      case "Human":
         // 标准人类所有属性+1
         bonuses = {
           strength: 1,
@@ -92,63 +92,63 @@ const AbilityScoresStep: React.FC<AbilityScoresStepProps> = ({
           charisma: 1,
         };
         break;
-      case "精灵 (Elf)":
+      case "Elf":
         // 基础精灵敏捷+2
         bonuses = { dexterity: 2 };
 
         // 精灵亚种
-        if (subrace === "高等精灵") {
+        if (subrace === "High Elf") {
           bonuses.intelligence = 1;
-        } else if (subrace === "木精灵") {
+        } else if (subrace === "Wood Elf") {
           bonuses.wisdom = 1;
-        } else if (subrace === "黑暗精灵") {
+        } else if (subrace === "Dark Elf") {
           bonuses.charisma = 1;
         }
         break;
-      case "矮人 (Dwarf)":
+      case "Dwarf":
         // 基础矮人体质+2
         bonuses = { constitution: 2 };
 
         // 矮人亚种
-        if (subrace === "山地矮人") {
+        if (subrace === "Mountain Dwarf") {
           bonuses.strength = 2;
-        } else if (subrace === "丘陵矮人") {
+        } else if (subrace === "Hill Dwarf") {
           bonuses.wisdom = 1;
         }
         break;
-      case "半身人 (Halfling)":
+      case "Halfling":
         // 基础半身人敏捷+2
         bonuses = { dexterity: 2 };
 
         // 半身人亚种
-        if (subrace === "轻足半身人") {
+        if (subrace === "Lightfoot Halfling") {
           bonuses.charisma = 1;
-        } else if (subrace === "强魄半身人") {
+        } else if (subrace === "Stout Halfling") {
           bonuses.constitution = 1;
         }
         break;
-      case "半精灵 (Half-Elf)":
+      case "Half-Elf":
         // 半精灵魅力+2，以及两项其他属性+1
         bonuses = { charisma: 2 };
         break;
-      case "半兽人 (Half-Orc)":
+      case "Half-Orc":
         // 半兽人力量+2，体质+1
         bonuses = { strength: 2, constitution: 1 };
         break;
-      case "侏儒 (Gnome)":
+      case "Gnome":
         // 侏儒智力+2
         bonuses = { intelligence: 2 };
-        if (subrace === "森林侏儒") {
+        if (subrace === "Forest Gnome") {
           bonuses.dexterity = 1;
-        } else if (subrace === "岩石侏儒") {
+        } else if (subrace === "Rock Gnome") {
           bonuses.constitution = 1;
         }
         break;
-      case "提夫林 (Tiefling)":
+      case "Tiefling":
         // 提夫林魅力+2，智力+1
         bonuses = { charisma: 2, intelligence: 1 };
         break;
-      case "龙裔 (Dragonborn)":
+      case "Dragonborn":
         // 龙裔力量+2，魅力+1
         bonuses = { strength: 2, charisma: 1 };
         break;
@@ -214,17 +214,17 @@ const AbilityScoresStep: React.FC<AbilityScoresStepProps> = ({
   const formatStatName = (stat: string) => {
     switch (stat) {
       case "strength":
-        return "力量 (STR)";
+        return "Strength (STR)";
       case "dexterity":
-        return "敏捷 (DEX)";
+        return "Dexterity (DEX)";
       case "constitution":
-        return "体质 (CON)";
+        return "Constitution (CON)";
       case "intelligence":
-        return "智力 (INT)";
+        return "Intelligence (INT)";
       case "wisdom":
-        return "感知 (WIS)";
+        return "Wisdom (WIS)";
       case "charisma":
-        return "魅力 (CHA)";
+        return "Charisma (CHA)";
       default:
         return stat;
     }
@@ -364,7 +364,7 @@ const AbilityScoresStep: React.FC<AbilityScoresStepProps> = ({
   return (
     <div className="card bg-base-100 shadow-xl">
       <div className="card-body">
-        <h2 className="card-title text-2xl mb-4">分配属性值</h2>
+        <h2 className="card-title text-2xl mb-4">Ability Scores</h2>
 
         {/* 属性生成方法选择 */}
         <div className="tabs tabs-boxed mb-6">
@@ -374,7 +374,7 @@ const AbilityScoresStep: React.FC<AbilityScoresStepProps> = ({
             }`}
             onClick={() => changeGenerationMethod("pointBuy")}
           >
-            点数购买
+            pointBuy
           </a>
           <a
             className={`tab ${
@@ -382,7 +382,7 @@ const AbilityScoresStep: React.FC<AbilityScoresStepProps> = ({
             }`}
             onClick={() => changeGenerationMethod("standardArray")}
           >
-            标准数组
+            standardArray
           </a>
           <a
             className={`tab ${
@@ -390,7 +390,7 @@ const AbilityScoresStep: React.FC<AbilityScoresStepProps> = ({
             }`}
             onClick={() => changeGenerationMethod("rolling")}
           >
-            掷骰法
+            rolling
           </a>
         </div>
 
@@ -398,19 +398,21 @@ const AbilityScoresStep: React.FC<AbilityScoresStepProps> = ({
         {generationMethod === "pointBuy" && (
           <div className="bg-amber-100 p-4 rounded-lg mb-6">
             <div className="flex justify-between items-center">
-              <h3 className="font-bold">点数购买系统</h3>
+              <h3 className="font-bold">pointBuy system</h3>
               <div className="text-right">
                 <span className="font-bold">
-                  已用点数: {usedPoints}/{TOTAL_POINTS}
+                  Points Used: {usedPoints}/{TOTAL_POINTS}
                 </span>
                 <div className="text-xs mt-1">
-                  可用点数: {TOTAL_POINTS - usedPoints}
+                  Available Points: {TOTAL_POINTS - usedPoints}
                 </div>
               </div>
             </div>
             <p className="text-sm mt-2">
-              从基础值8开始，使用点数提高属性。各属性最低为8，最高为15（种族加成前）。
-              点数成本：8(0), 9(1), 10(2), 11(3), 12(4), 13(5), 14(7), 15(9)
+              Start from base value 8, use points to increase attributes. Each
+              attribute has a minimum of 8 and maximum of 15 (before racial
+              bonuses). Point costs: 8(0), 9(1), 10(2), 11(3), 12(4), 13(5),
+              14(7), 15(9)
             </p>
           </div>
         )}
@@ -446,13 +448,14 @@ const AbilityScoresStep: React.FC<AbilityScoresStepProps> = ({
         {generationMethod === "rolling" && (
           <div className="bg-amber-100 p-4 rounded-lg mb-6">
             <div className="flex justify-between items-center">
-              <h3 className="font-bold">掷骰法 (4d6取3最高)</h3>
+              <h3 className="font-bold">Rolling Method (4d6 drop lowest)</h3>
               <button className="btn btn-sm" onClick={rollStats}>
-                重新掷骰
+                Roll Again
               </button>
             </div>
             <p className="text-sm mt-2">
-              为每个属性掷4个6面骰，取其中3个最高值的总和。结果已按从高到低排序。
+              Roll 4 six-sided dice for each attribute, take the sum of the
+              highest 3 values. Results are sorted from highest to lowest.
             </p>
             {rolledValues.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-3">
@@ -491,7 +494,7 @@ const AbilityScoresStep: React.FC<AbilityScoresStepProps> = ({
                     </span>
                     {generationMethod === "pointBuy" && (
                       <span className="label-text-alt">
-                        成本: {pointCost} 点
+                        Cost: {pointCost} points
                       </span>
                     )}
                   </label>
@@ -530,7 +533,7 @@ const AbilityScoresStep: React.FC<AbilityScoresStepProps> = ({
                         +
                       </button>
                       <span className="ml-4">
-                        调整值: {calculateModifier(value) >= 0 ? "+" : ""}
+                        Modifier: {calculateModifier(value) >= 0 ? "+" : ""}
                         {calculateModifier(value)}
                       </span>
                     </div>
@@ -562,7 +565,7 @@ const AbilityScoresStep: React.FC<AbilityScoresStepProps> = ({
                           </div>
                         </div>
                         <span className="ml-4">
-                          调整值: {calculateModifier(value) >= 0 ? "+" : ""}
+                          Modifier: {calculateModifier(value) >= 0 ? "+" : ""}
                           {calculateModifier(value)}
                         </span>
                       </div>
@@ -625,7 +628,7 @@ const AbilityScoresStep: React.FC<AbilityScoresStepProps> = ({
                             </div>
                           </div>
                           <span className="ml-4">
-                            调整值: {calculateModifier(value) >= 0 ? "+" : ""}
+                            Modifier: {calculateModifier(value) >= 0 ? "+" : ""}
                             {calculateModifier(value)}
                           </span>
                         </div>
@@ -668,32 +671,35 @@ const AbilityScoresStep: React.FC<AbilityScoresStepProps> = ({
           </div>
 
           <div className="bg-base-200 p-4 rounded-lg">
-            <h3 className="font-bold text-lg">属性说明</h3>
+            <h3 className="font-bold text-lg">Attribute Descriptions</h3>
             <ul className="list-disc list-inside space-y-2 mt-2">
               <li>
-                <strong>力量 (STR)</strong>:
-                决定角色的身体力量，影响近战攻击和伤害
+                <strong>Strength (STR)</strong>: Determines physical power,
+                affects melee attacks and damage
               </li>
               <li>
-                <strong>敏捷 (DEX)</strong>:
-                决定角色的灵活性，影响远程攻击、先攻和AC
+                <strong>Dexterity (DEX)</strong>: Determines agility, affects
+                ranged attacks, initiative, and AC
               </li>
               <li>
-                <strong>体质 (CON)</strong>: 决定角色的耐力和健康，影响生命值
+                <strong>Constitution (CON)</strong>: Determines endurance and
+                health, affects hit points
               </li>
               <li>
-                <strong>智力 (INT)</strong>: 决定角色的学识和逻辑推理能力
+                <strong>Intelligence (INT)</strong>: Determines knowledge and
+                logical reasoning ability
               </li>
               <li>
-                <strong>感知 (WIS)</strong>: 决定角色的直觉和洞察力
+                <strong>Wisdom (WIS)</strong>: Determines intuition and insight
               </li>
               <li>
-                <strong>魅力 (CHA)</strong>: 决定角色的个人魅力和社交能力
+                <strong>Charisma (CHA)</strong>: Determines personal charm and
+                social ability
               </li>
             </ul>
 
             <div className="mt-6 p-4 bg-base-300 rounded-lg">
-              <h4 className="font-bold mb-2">种族属性加成</h4>
+              <h4 className="font-bold mb-2">Racial Attribute Bonuses</h4>
               {Object.keys(racialBonuses).length > 0 ? (
                 <ul className="text-sm space-y-1">
                   {Object.entries(racialBonuses).map(([stat, bonus]) => (
@@ -703,24 +709,29 @@ const AbilityScoresStep: React.FC<AbilityScoresStepProps> = ({
                   ))}
                 </ul>
               ) : (
-                <p className="text-sm italic">请选择一个种族来查看属性加成</p>
+                <p className="text-sm italic">
+                  Select a race to view attribute bonuses
+                </p>
               )}
             </div>
 
             <div className="mt-6 p-4 bg-base-300 rounded-lg">
-              <h4 className="font-bold mb-2">属性生成方法说明</h4>
+              <h4 className="font-bold mb-2">Attribute Generation Methods</h4>
               <ul className="text-sm space-y-3">
                 <li>
-                  <strong>点数购买</strong>:
-                  官方规则中最常用的方法。你有27点用于提升属性，不同的属性值有不同的点数成本。
+                  <strong>Point Buy</strong>: The most commonly used official
+                  method. You have 27 points to increase attributes, with
+                  different costs for different values.
                 </li>
                 <li>
-                  <strong>标准数组</strong>:
-                  使用预先定义的数值(15,14,13,12,10,8)分配到你的六个属性上，不需要计算点数。
+                  <strong>Standard Array</strong>: Use predefined values
+                  (15,14,13,12,10,8) for your six attributes, no point
+                  calculation needed.
                 </li>
                 <li>
-                  <strong>掷骰法</strong>:
-                  传统的DnD属性生成方法。为每个属性掷4d6取最高的3个值之和，更具随机性。
+                  <strong>Rolling</strong>: Traditional DnD method. Roll 4d6 and
+                  take the sum of the highest 3 values for each attribute, more
+                  random.
                 </li>
               </ul>
             </div>

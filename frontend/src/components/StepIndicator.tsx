@@ -15,15 +15,15 @@ const StepIndicator: React.FC<StepIndicatorProps> = ({
 }) => {
   // 基本步骤标签
   const steps = [
-    "基本信息",
-    "种族",
-    "职业",
-    "背景",
-    "属性",
-    "技能",
-    "立绘",
-    "完成",
-  ].slice(0, totalSteps); // 使用传入的totalSteps来截取需要的步骤
+    "Basic Info",
+    "Race",
+    "Class",
+    "Background",
+    "Abilities",
+    "Skills",
+    "Portrait",
+    "Complete",
+  ].slice(0, totalSteps); // Use the provided totalSteps to slice the steps array
 
   return (
     <ul className="steps steps-vertical lg:steps-horizontal w-full">

@@ -94,12 +94,12 @@ const RulesPage: React.FC = () => {
           </div>
         ) : (
           <div className="bg-[#FAF6E9] rounded-lg p-6 shadow-md">
-            {/* 核心规则书标题 */}
+            {/* Core Rulebook Title */}
             <h2 className="text-2xl font-bold text-[#8B0000] mb-6">
-              核心规则书
+              Core Rulebook
             </h2>
 
-            {/* 规则书卡片 */}
+            {/* Rulebook Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
               {rulebooks.map((book) => (
                 <div

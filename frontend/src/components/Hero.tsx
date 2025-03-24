@@ -10,30 +10,34 @@ import "../styles/gradient-text-animation.css"; // 导入渐变文字动画样�
 // import ruleLogo from "../assets/logo/rulelogo.png";
 
 const Hero: React.FC = () => {
-  // 功能卡片数据 - 只保留四个主要功能
+  // Feature card data
   const features = [
     {
       title: "Rules",
-      description: "快速访问和下载D&D 5e的规则书和参考资料,掌握游戏核心机制",
-      iconSrc: "/images/logo/rulelogo.png", // 更新为public目录路径
+      description:
+        "Quick access and download D&D 5e rulebooks and reference materials, master the core game mechanics",
+      iconSrc: "/images/logo/rulelogo.png",
       link: "/rules",
     },
     {
       title: "AI GM",
-      description: "让AI作为你的游戏大师,创建和管理你的桌面角色扮演游戏",
-      iconSrc: "/images/logo/aigmLogo.png", // 更新为public目录路径
+      description:
+        "Let AI be your Game Master, create and manage your tabletop roleplaying games",
+      iconSrc: "/images/logo/aigmLogo.png",
       link: "/ai-gm",
     },
     {
       title: "Map Generator",
-      description: "随机生成精美的战役地图和场景,为你的冒险增添视觉体验",
-      iconSrc: "/images/logo/mapmakerLogo.png", // 更新为public目录路径
+      description:
+        "Randomly generate beautiful campaign maps and scenes, add visual experience to your adventures",
+      iconSrc: "/images/logo/mapmakerLogo.png",
       link: "/map-generator",
     },
     {
       title: "Character Creation",
-      description: "轻松创建和管理你的TRPG角色,自定义能力值和特性",
-      iconSrc: "/images/logo/characterLogo.png", // 更新为public目录路径
+      description:
+        "Easily create and manage your TRPG characters, customize abilities and traits",
+      iconSrc: "/images/logo/characterLogo.png",
       link: "/character-creation",
     },
   ];
@@ -45,7 +49,7 @@ const Hero: React.FC = () => {
         <div className="rounded-3xl overflow-hidden shadow-lg">
           <div
             className="hero h-[65vh] bg-cover bg-center "
-            style={{ backgroundImage: `url('/images/HeroSectionBG07.jpg')` }} // 更新为public目录路径
+            style={{ backgroundImage: `url('/images/HeroSectionBG07.jpg')` }}
           >
             <div className="hero-overlay bg-opacity-50  "></div>
             <div className="hero-content text-center text-neutral-content z-10">

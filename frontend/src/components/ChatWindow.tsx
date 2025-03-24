@@ -149,13 +149,13 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
             <div className="text-center">
               <h2 className="text-xl font-bold">No active chat</h2>
               <p className="text-base-content/70">
-                从侧边栏选择对话或创建新对话
+                Select a conversation from the sidebar or create a new one
               </p>
               <button
                 className="btn btn-primary mt-4"
                 onClick={() => createNewChatSession()}
               >
-                开始新对话
+                Start New Chat
               </button>
             </div>
           </div>

@@ -14,15 +14,14 @@ const DiceToggleButton: React.FC<DiceToggleButtonProps> = ({
     <button
       onClick={toggleDiceWidget}
       className="btn btn-ghost btn-circle text-[#F8F2DE]"
-      title={isDiceWidgetVisible ? "隐藏骰子" : "显示骰子"}
+      title={isDiceWidgetVisible ? "Hide Dice" : "Show Dice"}
     >
       <img
         src={diceIcon}
-        alt="骰子"
+        alt="Dice"
         width="20"
         height="20"
         className="w-5 h-5 filter brightness-0 invert"
-        // 使用固定的白色滤镜，在深色导航栏上显示清晰
       />
     </button>
   );

@@ -16,82 +16,82 @@ const SkillsStep: React.FC<SkillsStepProps> = ({
   characterClass,
   background,
 }) => {
-  // 存储职业和背景可选的技能
+  // Store class and background skill options
   const [classSkillOptions, setClassSkillOptions] = useState<string[]>([]);
 
-  // 职业允许选择的技能数量
+  // Number of skills allowed by class
   const [classSkillCount, setClassSkillCount] = useState(0);
-  // 背景赋予的固定技能
+  // Fixed skills granted by background
   const [backgroundSkills, setBackgroundSkills] = useState<string[]>([]);
 
-  // 计算已经选择的职业技能数量
+  // Track selected class skills count
   const [selectedClassSkills, setSelectedClassSkills] = useState<string[]>([]);
 
-  // 当职业或背景变化时，更新可选技能
+  // Update available skills when class or background changes
   useEffect(() => {
-    // 重置已选技能状态
+    // Reset selected skills state
     setSelectedClassSkills([]);
 
-    // 根据职业设置可选技能和可选择数量
+    // Set available skills and count based on class
     switch (characterClass) {
-      case "战士 (Fighter)":
+      case "Fighter":
         setClassSkillOptions([
-          "体操 (Acrobatics)",
-          "驯兽 (Animal Handling)",
-          "运动 (Athletics)",
-          "历史 (History)",
-          "洞悉 (Insight)",
-          "威吓 (Intimidation)",
-          "察觉 (Perception)",
-          "求生 (Survival)",
+          "Acrobatics",
+          "Animal Handling",
+          "Athletics",
+          "History",
+          "Insight",
+          "Intimidation",
+          "Perception",
+          "Survival",
         ]);
         setClassSkillCount(2);
         break;
-      case "法师 (Wizard)":
+      case "Wizard":
         setClassSkillOptions([
-          "奥秘 (Arcana)",
-          "历史 (History)",
-          "洞悉 (Insight)",
-          "调查 (Investigation)",
-          "医疗 (Medicine)",
-          "宗教 (Religion)",
+          "Arcana",
+          "History",
+          "Insight",
+          "Investigation",
+          "Medicine",
+          "Religion",
         ]);
         setClassSkillCount(2);
         break;
-      case "游荡者 (Rogue)":
+      case "Rogue":
         setClassSkillOptions([
-          "体操 (Acrobatics)",
-          "运动 (Athletics)",
-          "欺骗 (Deception)",
-          "洞悉 (Insight)",
-          "威吓 (Intimidation)",
-          "调查 (Investigation)",
-          "察觉 (Perception)",
-          "表演 (Performance)",
-          "说服 (Persuasion)",
-          "巧手 (Sleight of Hand)",
-          "隐匿 (Stealth)",
+          "Acrobatics",
+          "Athletics",
+          "Deception",
+          "Insight",
+          "Intimidation",
+          "Investigation",
+          "Perception",
+          "Performance",
+          "Persuasion",
+          "Sleight of Hand",
+          "Stealth",
         ]);
         setClassSkillCount(4);
         break;
-      case "牧师 (Cleric)":
+      case "Cleric":
         setClassSkillOptions([
-          "历史 (History)",
-          "洞悉 (Insight)",
-          "医疗 (Medicine)",
-          "说服 (Persuasion)",
-          "宗教 (Religion)",
+          "History",
+          "Insight",
+          "Medicine",
+          "Persuasion",
+          "Religion",
         ]);
         setClassSkillCount(2);
         break;
-      case "野蛮人 (Barbarian)":
+      case "Barbarian":
         setClassSkillOptions([
-          "驯兽 (Animal Handling)",
-          "运动 (Athletics)",
-          "威吓 (Intimidation)",
-          "自然 (Nature)",
-          "察觉 (Perception)",
-          "求生 (Survival)",
+          "Animal Handling",
+          "Athletics",
+          "Intimidation",
+          "Nature",
+          "Perception",
+          "Survival",
         ]);
         setClassSkillCount(2);
         break;
@@ -102,181 +102,131 @@ const SkillsStep: React.FC<SkillsStepProps> = ({
 
     // 设置背景提供的技能
     switch (background) {
-      case "侍僧 (Acolyte)":
-        setBackgroundSkills(["洞悉 (Insight)", "宗教 (Religion)"]);
+      case "Acolyte":
+        setBackgroundSkills(["Insight", "Religion"]);
         break;
-      case "罪犯 (Criminal)":
-        setBackgroundSkills(["欺骗 (Deception)", "隐匿 (Stealth)"]);
+      case "Criminal":
+        setBackgroundSkills(["Deception", "Stealth"]);
         break;
-      case "民间英雄 (Folk Hero)":
-        setBackgroundSkills(["驯兽 (Animal Handling)", "求生 (Survival)"]);
+      case "Folk Hero":
+        setBackgroundSkills(["Animal Handling", "Survival"]);
         break;
-      case "贵族 (Noble)":
-        setBackgroundSkills(["历史 (History)", "说服 (Persuasion)"]);
+      case "Noble":
+        setBackgroundSkills(["History", "Persuasion"]);
         break;
-      case "贤者 (Sage)":
-        setBackgroundSkills(["奥秘 (Arcana)", "历史 (History)"]);
+      case "Sage":
+        setBackgroundSkills(["Arcana", "History"]);
         break;
-      case "士兵 (Soldier)":
-        setBackgroundSkills(["运动 (Athletics)", "威吓 (Intimidation)"]);
+      case "Soldier":
+        setBackgroundSkills(["Athletics", "Intimidation"]);
         break;
-      case "流浪儿 (Urchin)":
-        setBackgroundSkills(["巧手 (Sleight of Hand)", "隐匿 (Stealth)"]);
+      case "Urchin":
+        setBackgroundSkills(["Sleight of Hand", "Stealth"]);
+        break;
+      case "Entertainer":
+        setBackgroundSkills(["Acrobatics", "Performance"]);
+        break;
+      case "Guild Artisan":
+        setBackgroundSkills(["Insight", "Persuasion"]);
         break;
       default:
         setBackgroundSkills([]);
     }
   }, [characterClass, background]);
 
-  // 当背景技能改变或技能选择改变时，更新已选职业技能
-  useEffect(() => {
-    // 过滤掉背景已经提供的技能，计算实际选择的职业技能
-    const selectedClass = skillProficiencies.filter(
-      (skill) => !backgroundSkills.includes(skill)
-    );
-    setSelectedClassSkills(selectedClass);
-  }, [skillProficiencies, backgroundSkills]);
-
-  // 处理技能选择
+  // Handle skill selection
   const handleSkillToggle = (skill: string) => {
-    // 如果是背景技能，不允许取消选择
-    if (backgroundSkills.includes(skill)) {
-      return;
-    }
+    // If skill is from background, do nothing
+    if (backgroundSkills.includes(skill)) return;
 
-    // 如果技能已选择，可以取消
+    // If skill is already selected, remove it
     if (skillProficiencies.includes(skill)) {
       toggleSkill(skill);
+      if (classSkillOptions.includes(skill)) {
+        setSelectedClassSkills(selectedClassSkills.filter((s) => s !== skill));
+      }
       return;
     }
 
-    // 如果是职业技能且未达到上限，允许选择
-    if (
-      classSkillOptions.includes(skill) &&
-      selectedClassSkills.length < classSkillCount
-    ) {
-      toggleSkill(skill);
+    // If skill is not selectable, do nothing
+    if (!isSkillSelectable(skill)) return;
+
+    // Add the skill
+    toggleSkill(skill);
+    if (classSkillOptions.includes(skill)) {
+      setSelectedClassSkills([...selectedClassSkills, skill]);
     }
   };
 
-  // 判断技能是否可选
+  // Check if a skill can be selected
   const isSkillSelectable = (skill: string) => {
-    // 背景技能总是被选中且不可更改
-    if (backgroundSkills.includes(skill)) {
-      return false;
-    }
+    // If skill is from background, it's always selected
+    if (backgroundSkills.includes(skill)) return false;
 
-    // 如果已经选择了这个技能，允许取消
-    if (skillProficiencies.includes(skill)) {
-      return true;
-    }
+    // If skill is already selected, it can be deselected
+    if (skillProficiencies.includes(skill)) return true;
 
-    // 如果是职业技能且未达到上限，允许选择
-    return (
-      classSkillOptions.includes(skill) &&
-      selectedClassSkills.length < classSkillCount
-    );
+    // If not a class skill option, it can't be selected
+    if (!classSkillOptions.includes(skill)) return false;
+
+    // Check if we've reached the class skill limit
+    const selectedClassSkillCount = selectedClassSkills.length;
+    return selectedClassSkillCount < classSkillCount;
   };
 
   return (
     <div className="card bg-base-100 shadow-xl">
       <div className="card-body">
-        <h2 className="card-title text-2xl mb-6">选择技能熟练</h2>
+        <h2 className="card-title text-2xl mb-6">Select Skills</h2>
+        <p className="mb-4">
+          {characterClass && background ? (
+            <>
+              Your {characterClass} class allows you to choose {classSkillCount}{" "}
+              skills. Your {background} background grants you proficiency in{" "}
+              {backgroundSkills.join(" and ")}.
+            </>
+          ) : (
+            "Select a class and background to view available skills."
+          )}
+        </p>
 
-        <div className="max-w-3xl mx-auto">
-          <p className="mb-2">
-            基于你的职业和背景，选择你熟练的技能。
-            {characterClass && (
-              <span className="font-semibold">
-                {" "}
-                你的职业 {characterClass} 允许你从特定技能中选择{" "}
-                {classSkillCount} 项技能。
-              </span>
-            )}
-            {background && backgroundSkills.length > 0 && (
-              <span className="font-semibold">
-                {" "}
-                你的背景 {background} 已经提供了 {backgroundSkills.join("、")}{" "}
-                技能。
-              </span>
-            )}
-          </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+          {SKILLS.map((skill) => {
+            const isFromBackground = backgroundSkills.includes(skill);
+            const isSelected = skillProficiencies.includes(skill);
+            const isDisabled = !isSkillSelectable(skill);
 
-          <div className="flex mb-4 items-center">
-            <div className="badge badge-primary mr-2">已选择</div>
-            <span className="mr-4">{skillProficiencies.length} 项技能</span>
-            <div className="badge badge-outline mr-2">职业技能</div>
-            <span>
-              {selectedClassSkills.length}/{classSkillCount}
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-            {SKILLS.map((skill) => {
-              const isFromBackground = backgroundSkills.includes(skill);
-              const isSelected = skillProficiencies.includes(skill);
-              const isDisabled = !isSkillSelectable(skill);
-
-              return (
-                <div key={skill} className="form-control">
-                  <label
-                    className={`label cursor-pointer justify-start gap-2 ${
-                      isDisabled && !isSelected ? "opacity-50" : ""
+            return (
+              <div key={skill} className="form-control">
+                <label
+                  className={`label cursor-pointer justify-start gap-2 ${
+                    isDisabled && !isSelected ? "opacity-50" : ""
+                  }`}
+                >
+                  <input
+                    type="checkbox"
+                    className={`checkbox ${
+                      isFromBackground
+                        ? "checkbox-secondary"
+                        : "checkbox-primary"
                     }`}
-                  >
-                    <input
-                      type="checkbox"
-                      className={`checkbox ${
-                        isFromBackground
-                          ? "checkbox-secondary"
-                          : "checkbox-primary"
-                      }`}
-                      checked={isSelected}
-                      onChange={() => handleSkillToggle(skill)}
-                      disabled={isDisabled && !isSelected}
-                    />
-                    <span className="label-text">
-                      {skill}
-                      {isFromBackground && (
-                        <span className="text-xs text-secondary"> (背景)</span>
-                      )}
-                    </span>
-                  </label>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="bg-base-200 p-4 rounded-lg mt-6">
-            <h3 className="font-bold text-lg">技能说明</h3>
-            <p className="my-2">
-              你的角色可以在各种情境下使用熟练的技能获得额外的加值。熟练的技能会添加你的熟练加值到相关检定中。
-            </p>
-            <p className="my-2">
-              技能熟练通常由你的职业、背景和某些专长决定。每个职业允许你选择特定数量的技能，而你的背景则自动提供2项技能熟练。
-            </p>
-
-            <div className="mt-4">
-              <h4 className="font-semibold">关键属性对应的技能：</h4>
-              <ul className="list-disc list-inside mt-2">
-                <li>
-                  <strong>力量</strong>：运动
-                </li>
-                <li>
-                  <strong>敏捷</strong>：体操、巧手、隐匿
-                </li>
-                <li>
-                  <strong>智力</strong>：奥秘、历史、调查、自然、宗教
-                </li>
-                <li>
-                  <strong>感知</strong>：驯兽、洞悉、医疗、察觉、求生
-                </li>
-                <li>
-                  <strong>魅力</strong>：欺骗、威吓、表演、说服
-                </li>
-              </ul>
-            </div>
-          </div>
+                    checked={isSelected}
+                    onChange={() => handleSkillToggle(skill)}
+                    disabled={isDisabled && !isSelected}
+                  />
+                  <span className="label-text">
+                    {skill}
+                    {isFromBackground && (
+                      <span className="text-xs text-secondary">
+                        {" "}
+                        (Background)
+                      </span>
+                    )}
+                  </span>
+                </label>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
