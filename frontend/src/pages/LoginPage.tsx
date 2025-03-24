@@ -15,7 +15,7 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
 
     if (!username || !password) {
-      setError("请填写用户名和密码");
+      setError("Please enter the username and password");
       return;
     }
 
@@ -36,7 +36,7 @@ const LoginPage: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-base-200">
       <div className="max-w-md w-full p-6 bg-base-100 rounded-lg shadow-xl">
         <h1 className="text-3xl font-bold text-center text-primary mb-8">
-          登录
+          Sign In
         </h1>
 
         {error && (
@@ -61,7 +61,7 @@ const LoginPage: React.FC = () => {
         <form onSubmit={handleSubmit}>
           <div className="form-control mb-4">
             <label className="label">
-              <span className="label-text">用户名</span>
+              <span className="label-text">Username</span>
             </label>
             <input
               type="text"
@@ -73,7 +73,7 @@ const LoginPage: React.FC = () => {
 
           <div className="form-control mb-6">
             <label className="label">
-              <span className="label-text">密码</span>
+              <span className="label-text">Password</span>
             </label>
             <input
               type="password"
@@ -88,15 +88,15 @@ const LoginPage: React.FC = () => {
             className={`btn btn-primary w-full ${isLoading ? "loading" : ""}`}
             disabled={isLoading}
           >
-            {isLoading ? "登录中..." : "登录"}
+            {isLoading ? "Logging in…" : "Login"}
           </button>
         </form>
 
         <div className="text-center mt-6">
           <p>
-            还没有账号？{" "}
+            Don't have an account?{" "}
             <Link to="/register" className="text-primary hover:underline">
-              注册新账号
+              Sign up
             </Link>
           </p>
         </div>

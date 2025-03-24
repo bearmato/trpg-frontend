@@ -51,26 +51,26 @@ const NavBar = () => {
             >
               <li>
                 <Link to="/profile" className="justify-between">
-                  个人资料
+                  Personal Profile
                   <span className="badge">{user?.username}</span>
                 </Link>
               </li>
               <li>
-                <a>设置</a>
+                <a>settings</a>
               </li>
               <li>
-                <a onClick={handleLogout}>登出</a>
+                <a onClick={handleLogout}>Log Out</a>
               </li>
             </ul>
           </div>
         ) : (
           <div className="flex gap-2">
             <Link to="/login" className="btn btn-ghost text-[#F8F2DE]">
-              登录
+              login
             </Link>
-            <Link to="/register" className="btn btn-primary text-[#F8F2DE]">
+            {/* <Link to="/register" className="btn btn-primary text-[#F8F2DE]">
               注册
-            </Link>
+            </Link> */}
           </div>
         )}
       </div>

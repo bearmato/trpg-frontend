@@ -28,17 +28,17 @@ const RegisterPage: React.FC = () => {
     }
 
     if (!validateEmail(email)) {
-      setError("请输入有效的电子邮箱");
+      setError("Invalid email format.");
       return;
     }
 
     if (password !== passwordConfirm) {
-      setError("两次输入的密码不匹配");
+      setError("Passwords do not match.");
       return;
     }
 
     if (password.length < 8) {
-      setError("密码长度至少为8个字符");
+      setError("Password must be at least 8 characters.");
       return;
     }
 
@@ -59,7 +59,7 @@ const RegisterPage: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-base-200">
       <div className="max-w-md w-full p-6 bg-base-100 rounded-lg shadow-xl">
         <h1 className="text-3xl font-bold text-center text-primary mb-8">
-          注册账号
+          Create Account
         </h1>
 
         {error && (
@@ -84,7 +84,7 @@ const RegisterPage: React.FC = () => {
         <form onSubmit={handleSubmit}>
           <div className="form-control mb-4">
             <label className="label">
-              <span className="label-text">用户名</span>
+              <span className="label-text">Username</span>
             </label>
             <input
               type="text"
@@ -96,7 +96,7 @@ const RegisterPage: React.FC = () => {
 
           <div className="form-control mb-4">
             <label className="label">
-              <span className="label-text">电子邮箱</span>
+              <span className="label-text">Email</span>
             </label>
             <input
               type="email"
@@ -108,7 +108,7 @@ const RegisterPage: React.FC = () => {
 
           <div className="form-control mb-4">
             <label className="label">
-              <span className="label-text">密码</span>
+              <span className="label-text">password</span>
             </label>
             <input
               type="password"
@@ -117,13 +117,15 @@ const RegisterPage: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
             <label className="label">
-              <span className="label-text-alt">密码至少8个字符</span>
+              <span className="label-text-alt">
+                Password must be at least 8 characters.
+              </span>
             </label>
           </div>
 
           <div className="form-control mb-6">
             <label className="label">
-              <span className="label-text">确认密码</span>
+              <span className="label-text">confirm the password</span>
             </label>
             <input
               type="password"
@@ -144,9 +146,9 @@ const RegisterPage: React.FC = () => {
 
         <div className="text-center mt-6">
           <p>
-            已有账号？{" "}
+            Already have an account?{" "}
             <Link to="/login" className="text-primary hover:underline">
-              登录
+              Sign In
             </Link>
           </p>
         </div>
