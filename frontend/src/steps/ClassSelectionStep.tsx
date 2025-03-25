@@ -173,7 +173,7 @@ const ClassSelectionStep: React.FC<ClassSelectionStepProps> = ({
               </label>
               <select
                 className="select select-bordered w-full"
-                value={character.characterClass}
+                value={character.character_class}
                 onChange={(e) => updateCharacter(e.target.value)}
               >
                 <option value="">Select a class</option>
@@ -185,11 +185,11 @@ const ClassSelectionStep: React.FC<ClassSelectionStepProps> = ({
               </select>
             </div>
 
-            {character.characterClass && (
+            {character.character_class && (
               <div className="mt-6">
                 <h3 className="font-semibold text-lg mb-2">Class Features</h3>
                 <ul className="space-y-1 text-sm">
-                  {getClassFeatures(character.characterClass).map(
+                  {getClassFeatures(character.character_class).map(
                     (feature, index) => (
                       <li key={index} className="flex items-start">
                         <div className="w-2 h-2 bg-primary rounded-full mr-2 mt-1.5"></div>
@@ -203,13 +203,13 @@ const ClassSelectionStep: React.FC<ClassSelectionStepProps> = ({
           </div>
 
           <div className="bg-base-200 p-4 rounded-lg">
-            {character.characterClass ? (
+            {character.character_class ? (
               <>
                 <h3 className="font-bold text-lg mb-2">
-                  {character.characterClass}
+                  {character.character_class}
                 </h3>
                 <p className="my-2 text-sm">
-                  {getClassDescription(character.characterClass)}
+                  {getClassDescription(character.character_class)}
                 </p>
                 <div className="mt-4 text-sm">
                   <p className="italic text-base-content/80">

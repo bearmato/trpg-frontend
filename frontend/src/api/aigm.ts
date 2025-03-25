@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const API_BASE_URL = "https://trpg-backend-production-fb60.up.railway.app/api/aigm";
+//const API_BASE_URL = "https://trpg-backend-production-fb60.up.railway.app/api/aigm";
+// 本地开发用
+const BASE_URL = "http://localhost:8000";
+const API_BASE_URL = `${BASE_URL}/api/aigm`;
 
 /**
  * Send a message to AI GM with conversation history
@@ -90,6 +93,13 @@ export const generateCharacterPortrait = async (options: PortraitOptions) => {
       `${API_BASE_URL}/character-portrait/`, 
       options
     );
+    
+    // 确保返回的图片 URL 是完整的
+    const image_url = response.data.image_url;
+    if (image_url && !image_url.startsWith('http')) {
+      response.data.image_url = `${BASE_URL}${image_url}`;
+    }
+    
     return response.data;
   } catch (error) {
     console.error("Failed to generate character portrait:", error);

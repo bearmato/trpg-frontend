@@ -1,5 +1,3 @@
-//import React from 'react'
-
 import { Link } from "react-router-dom";
 
 const HomePageMenuButton = () => {
@@ -35,10 +33,16 @@ const HomePageMenuButton = () => {
           <Link to="/ai-gm">AI GM</Link>
         </li>
         <li>
+          <Link to="/character-library">Character Library</Link>
+        </li>
+        <li>
           <Link to="/character-creation">Create a Character</Link>
         </li>
         <li>
-          <Link to="/dice">Roll a Dice</Link>
+          <Link to="/map-generator">Map Generator</Link>
+        </li>
+        <li>
+          <Link to="/dice">Dice</Link>
         </li>
       </ul>
     </div>

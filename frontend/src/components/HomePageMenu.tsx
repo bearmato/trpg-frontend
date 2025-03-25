@@ -10,16 +10,16 @@ const HomePageMenu = () => {
         <Link to="/ai-gm">AI GM</Link>
       </li>
       <li>
-        <Link to="/map-generator">map generater</Link>
-      </li>
-      {/* <li>
-        <Link to="/background">background</Link>
-      </li> */}
-      <li>
-        <Link to="/character-creation">character-creation</Link>
+        <Link to="/character-library">Character Library</Link>
       </li>
       <li>
-        <Link to="/dice">dice</Link>
+        <Link to="/character-creation">Create Character</Link>
+      </li>
+      <li>
+        <Link to="/map-generator">Map Generator</Link>
+      </li>
+      <li>
+        <Link to="/dice">Dice</Link>
       </li>
     </ul>
   );

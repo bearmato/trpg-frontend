@@ -228,7 +228,8 @@ const PortraitStep: React.FC<PortraitStepProps> = ({
 
     // Get features based on character's race and class
     const raceFeatures = raceSpecificFeatures[character.race] || [];
-    const classFeatures = classSpecificFeatures[character.characterClass] || [];
+    const classFeatures =
+      classSpecificFeatures[character.character_class] || [];
     const backgroundFeatures =
       backgroundSpecificFeatures[character.background] || [];
 
@@ -255,7 +256,7 @@ const PortraitStep: React.FC<PortraitStepProps> = ({
 
   // 生成立绘
   const handleGeneratePortrait = async () => {
-    if (!character.name || !character.race || !character.characterClass) {
+    if (!character.name || !character.race || !character.character_class) {
       setError(
         "Please fill in character name, race, and class before generating portrait"
       );
@@ -270,14 +271,15 @@ const PortraitStep: React.FC<PortraitStepProps> = ({
       const response = await generateCharacterPortrait({
         name: character.name,
         race: character.race,
-        class: character.characterClass,
+        class: character.character_class,
         gender: gender,
         style: style,
         features: features,
       });
 
-      // Update character portrait URL
-      updateCharacter("portraitUrl", response.imageUrl);
+      console.log("Portrait generation response:", response);
+      // Update character portrait URL using snake_case
+      updateCharacter("portrait_url", response.image_url);
 
       // Show generation info
       setGenerationInfo("Portrait generated successfully!");
@@ -421,12 +423,23 @@ const PortraitStep: React.FC<PortraitStepProps> = ({
           {/* Portrait Display */}
           <div className="bg-base-200 p-4 rounded-lg" id="character-portrait">
             <h3 className="font-bold text-lg mb-3">Character Portrait</h3>
-            {character.portraitUrl ? (
+            {character.portrait_url ? (
               <div className="aspect-square rounded-lg overflow-hidden">
                 <img
-                  src={character.portraitUrl}
+                  src={character.portrait_url}
                   alt="Character Portrait"
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    console.error(
+                      "Image failed to load:",
+                      character.portrait_url
+                    );
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = "/placeholder-image.svg";
+                    setError(
+                      "Failed to load portrait image. Please try generating again."
+                    );
+                  }}
                 />
               </div>
             ) : (

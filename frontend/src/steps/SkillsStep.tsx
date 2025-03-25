@@ -4,16 +4,16 @@ import React, { useState, useEffect } from "react";
 import { SKILLS } from "../types/character";
 
 interface SkillsStepProps {
-  skillProficiencies: string[];
+  skill_proficiencies: string[];
   toggleSkill: (skill: string) => void;
-  characterClass: string;
+  character_class: string;
   background: string;
 }
 
 const SkillsStep: React.FC<SkillsStepProps> = ({
-  skillProficiencies,
+  skill_proficiencies,
   toggleSkill,
-  characterClass,
+  character_class,
   background,
 }) => {
   // Store class and background skill options
@@ -33,7 +33,7 @@ const SkillsStep: React.FC<SkillsStepProps> = ({
     setSelectedClassSkills([]);
 
     // Set available skills and count based on class
-    switch (characterClass) {
+    switch (character_class) {
       case "Fighter":
         setClassSkillOptions([
           "Acrobatics",
@@ -132,7 +132,7 @@ const SkillsStep: React.FC<SkillsStepProps> = ({
       default:
         setBackgroundSkills([]);
     }
-  }, [characterClass, background]);
+  }, [character_class, background]);
 
   // Handle skill selection
   const handleSkillToggle = (skill: string) => {
@@ -140,7 +140,7 @@ const SkillsStep: React.FC<SkillsStepProps> = ({
     if (backgroundSkills.includes(skill)) return;
 
     // If skill is already selected, remove it
-    if (skillProficiencies.includes(skill)) {
+    if (skill_proficiencies.includes(skill)) {
       toggleSkill(skill);
       if (classSkillOptions.includes(skill)) {
         setSelectedClassSkills(selectedClassSkills.filter((s) => s !== skill));
@@ -164,7 +164,7 @@ const SkillsStep: React.FC<SkillsStepProps> = ({
     if (backgroundSkills.includes(skill)) return false;
 
     // If skill is already selected, it can be deselected
-    if (skillProficiencies.includes(skill)) return true;
+    if (skill_proficiencies.includes(skill)) return true;
 
     // If not a class skill option, it can't be selected
     if (!classSkillOptions.includes(skill)) return false;
@@ -179,11 +179,11 @@ const SkillsStep: React.FC<SkillsStepProps> = ({
       <div className="card-body">
         <h2 className="card-title text-2xl mb-6">Select Skills</h2>
         <p className="mb-4">
-          {characterClass && background ? (
+          {character_class && background ? (
             <>
-              Your {characterClass} class allows you to choose {classSkillCount}{" "}
-              skills. Your {background} background grants you proficiency in{" "}
-              {backgroundSkills.join(" and ")}.
+              Your {character_class} class allows you to choose{" "}
+              {classSkillCount} skills. Your {background} background grants you
+              proficiency in {backgroundSkills.join(" and ")}.
             </>
           ) : (
             "Select a class and background to view available skills."
@@ -193,7 +193,7 @@ const SkillsStep: React.FC<SkillsStepProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
           {SKILLS.map((skill) => {
             const isFromBackground = backgroundSkills.includes(skill);
-            const isSelected = skillProficiencies.includes(skill);
+            const isSelected = skill_proficiencies.includes(skill);
             const isDisabled = !isSkillSelectable(skill);
 
             return (

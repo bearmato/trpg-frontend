@@ -12,17 +12,17 @@ const CompletionStep: React.FC<CompletionStepProps> = ({ character }) => {
   const calculateHP = (): number => {
     const conModifier = calculateModifier(character.stats.constitution);
 
-    if (character.characterClass === "Barbarian") {
+    if (character.character_class === "Barbarian") {
       return 12 + conModifier;
     } else if (
-      character.characterClass === "Fighter" ||
-      character.characterClass === "Paladin" ||
-      character.characterClass === "Ranger"
+      character.character_class === "Fighter" ||
+      character.character_class === "Paladin" ||
+      character.character_class === "Ranger"
     ) {
       return 10 + conModifier;
     } else if (
-      character.characterClass === "Sorcerer" ||
-      character.characterClass === "Wizard"
+      character.character_class === "Sorcerer" ||
+      character.character_class === "Wizard"
     ) {
       return 6 + conModifier;
     } else {
@@ -40,9 +40,9 @@ const CompletionStep: React.FC<CompletionStepProps> = ({ character }) => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Character Portrait - First Column */}
           <div className="flex flex-col items-center">
-            {character.portraitUrl ? (
+            {character.portrait_url ? (
               <img
-                src={character.portraitUrl}
+                src={character.portrait_url}
                 alt={`${character.name}'s Portrait`}
                 className="max-w-full rounded-lg shadow-lg border-2 border-primary max-h-96 object-contain mb-4"
               />
@@ -98,7 +98,7 @@ const CompletionStep: React.FC<CompletionStepProps> = ({ character }) => {
               </p>
               <p>
                 <span className="font-semibold">Level:</span> {character.level}{" "}
-                {character.characterClass}
+                {character.character_class}
               </p>
               <p>
                 <span className="font-semibold">Race:</span> {character.race}{" "}
@@ -150,8 +150,8 @@ const CompletionStep: React.FC<CompletionStepProps> = ({ character }) => {
 
               <h4 className="font-bold mt-4 mb-2">Skill Proficiencies</h4>
               <div className="flex flex-wrap gap-1">
-                {character.skillProficiencies.length > 0 ? (
-                  character.skillProficiencies.map((skill) => (
+                {character.skill_proficiencies.length > 0 ? (
+                  character.skill_proficiencies.map((skill: string) => (
                     <span key={skill} className="badge badge-primary">
                       {skill}
                     </span>
@@ -181,9 +181,9 @@ const CompletionStep: React.FC<CompletionStepProps> = ({ character }) => {
           {/* Background Story - Third Column */}
           <div>
             <h3 className="text-xl font-bold mb-4">Character Background</h3>
-            {character.backgroundStory ? (
+            {character.background_story ? (
               <div className="bg-base-200 p-4 rounded-lg shadow-sm prose">
-                {character.backgroundStory
+                {character.background_story
                   .split("\n")
                   .map((paragraph, index) => (
                     <p key={index} className="mb-2">

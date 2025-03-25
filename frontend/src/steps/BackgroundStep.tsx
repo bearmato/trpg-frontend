@@ -88,7 +88,7 @@ const BackgroundStep: React.FC<BackgroundStepProps> = ({
 
   // Generate background with AI
   const handleGenerateBackground = async () => {
-    if (!character.name || !character.race || !character.characterClass) {
+    if (!character.name || !character.race || !character.character_class) {
       setError(
         "Please fill in character name, race, and class before generating background story"
       );
@@ -113,7 +113,7 @@ const BackgroundStep: React.FC<BackgroundStepProps> = ({
       const response = await generateCharacterBackground({
         name: character.name,
         race: character.race,
-        class: character.characterClass,
+        class: character.character_class,
         background: character.background,
         alignment: character.alignment,
         keywords: keywords,
@@ -122,7 +122,7 @@ const BackgroundStep: React.FC<BackgroundStepProps> = ({
       });
 
       // Update character background story
-      updateCharacter("backgroundStory", response.background);
+      updateCharacter("background_story", response.background);
 
       // Show success message
       setSuccessMessage("Background story generated successfully!");
@@ -321,10 +321,10 @@ const BackgroundStep: React.FC<BackgroundStepProps> = ({
           {/* Background Story Display */}
           <div className="bg-base-200 p-4 rounded-lg" id="background-story">
             <h3 className="font-bold text-lg mb-3">Background Story</h3>
-            {character.backgroundStory ? (
+            {character.background_story ? (
               <div className="prose max-w-none">
                 <p className="whitespace-pre-wrap">
-                  {character.backgroundStory}
+                  {character.background_story}
                 </p>
               </div>
             ) : (

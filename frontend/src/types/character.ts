@@ -13,21 +13,21 @@ export interface Character {
   name: string;
   race: string;
   subrace: string;
-  characterClass: string;
+  character_class: string;
   subclass: string;
   level: number;
   background: string;
-  backgroundStory: string; // 背景故事
-  personality: string; // 个性特点
-  ideal: string; // 理想
-  bond: string; // 羁绊
-  flaw: string; // 缺点
+  background_story: string;
+  personality: string;
+  ideal: string;
+  bond: string;
+  flaw: string;
   alignment: string;
-  gender: string; // 新增：性别
-  features: string[]; // 新增：外貌特征
-  portraitUrl: string; // 新增：角色立绘URL
+  gender: string;
+  features: string[];
+  portrait_url: string;
   stats: CharacterStats;
-  skillProficiencies: string[];
+  skill_proficiencies: string[];
   equipment: string[];
 }
 

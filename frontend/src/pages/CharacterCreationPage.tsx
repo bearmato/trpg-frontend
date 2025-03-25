@@ -1,6 +1,5 @@
-// CharacterCreationPage.tsx - 主页面组件
-
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import BasicInfoStep from "../steps/BasicInfoStep";
 import RaceSelectionStep from "../steps/RaceSelectionStep";
 import ClassSelectionStep from "../steps/ClassSelectionStep";
@@ -11,29 +10,34 @@ import PortraitStep from "../steps/PortraitStep";
 import CompletionStep from "../steps/CompletionStep";
 import StepIndicator from "../components/StepIndicator";
 import { Character, CharacterStats } from "../types/character";
+import { saveCharacter as saveCharacterAPI } from "../api/characters";
 
 const CharacterCreationPage: React.FC = () => {
+  // 导航
+  const navigate = useNavigate();
   // 当前步骤状态
   const [currentStep, setCurrentStep] = useState(1);
+  // 加载状态
+  const [isLoading, setIsLoading] = useState(false);
 
   // 角色数据
   const [character, setCharacter] = useState<Character>({
     name: "",
     race: "",
     subrace: "",
-    characterClass: "",
+    character_class: "",
     subclass: "",
     level: 1,
     background: "",
-    backgroundStory: "", // 背景故事
-    personality: "", // 个性特点
-    ideal: "", // 理想
-    bond: "", // 羁绊
-    flaw: "", // 缺点
+    background_story: "",
+    personality: "",
+    ideal: "",
+    bond: "",
+    flaw: "",
     alignment: "",
-    gender: "male", // 默认性别
-    features: [], // 外貌特征
-    portraitUrl: "", // 角色立绘URL
+    gender: "male",
+    features: [],
+    portrait_url: "",
     stats: {
       strength: 10,
       dexterity: 10,
@@ -42,7 +46,7 @@ const CharacterCreationPage: React.FC = () => {
       wisdom: 10,
       charisma: 10,
     },
-    skillProficiencies: [],
+    skill_proficiencies: [],
     equipment: [],
   });
 
@@ -78,16 +82,16 @@ const CharacterCreationPage: React.FC = () => {
   // 技能选择切换
   const toggleSkill = (skill: string) => {
     setCharacter((prev) => {
-      const skills = [...prev.skillProficiencies];
+      const skills = [...prev.skill_proficiencies];
       if (skills.includes(skill)) {
         return {
           ...prev,
-          skillProficiencies: skills.filter((s) => s !== skill),
+          skill_proficiencies: skills.filter((s) => s !== skill),
         };
       } else {
         return {
           ...prev,
-          skillProficiencies: [...skills, skill],
+          skill_proficiencies: [...skills, skill],
         };
       }
     });
@@ -130,14 +134,24 @@ const CharacterCreationPage: React.FC = () => {
 
   // 处理职业变更
   const handleClassChange = (newClass: string) => {
-    updateCharacter("characterClass", newClass);
+    updateCharacter("character_class", newClass);
   };
 
   // 保存角色
-  const saveCharacter = () => {
-    console.log("Saving character:", character);
-    // Add API call here to save character to backend
-    alert("Character created successfully!");
+  const saveCharacter = async () => {
+    try {
+      setIsLoading(true);
+      const response = await saveCharacterAPI(character);
+      console.log("Character saved successfully:", response);
+      alert("Character created successfully!");
+      // 保存成功后跳转到角色库页面
+      navigate("/character-library");
+    } catch (error) {
+      console.error("Error saving character:", error);
+      alert("Failed to save character. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // 步骤控制
@@ -162,13 +176,13 @@ const CharacterCreationPage: React.FC = () => {
       case 2: // 种族选择
         return !!character.race;
       case 3: // 职业选择
-        return !!character.characterClass;
+        return !!character.character_class;
       case 4: // 背景
         return !!character.background && !!character.alignment; //用户必须同时完成背景和阵营的选择
       case 5: // 属性分配
         return true; // 属性有默认值，所以总是完成的
       case 6: // 技能选择
-        return character.skillProficiencies.length >= 2; // 至少选择2个技能
+        return character.skill_proficiencies.length >= 2; // 至少选择2个技能
       case 7: // 角色立绘
         return true; // 立绘是可选的，不强制要求
       default:
@@ -221,9 +235,9 @@ const CharacterCreationPage: React.FC = () => {
       case 6:
         return (
           <SkillsStep
-            skillProficiencies={character.skillProficiencies}
+            skill_proficiencies={character.skill_proficiencies}
             toggleSkill={toggleSkill}
-            characterClass={character.characterClass}
+            character_class={character.character_class}
             background={character.background}
           />
         );
@@ -304,22 +318,28 @@ const CharacterCreationPage: React.FC = () => {
             </svg>
           </button>
         ) : (
-          <button className="btn btn-primary ml-auto" onClick={saveCharacter}>
-            Save Character
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 ml-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
+          <button
+            className={`btn btn-primary ml-auto ${isLoading ? "loading" : ""}`}
+            onClick={saveCharacter}
+            disabled={isLoading}
+          >
+            {isLoading ? "Saving..." : "Save Character"}
+            {!isLoading && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 ml-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            )}
           </button>
         )}
       </div>
