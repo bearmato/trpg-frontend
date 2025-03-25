@@ -1,9 +1,9 @@
 import axios from "axios";
 import { Character } from "../types/character";
 
-//const API_BASE_URL = "https://trpg-backend-production-fb60.up.railway.app/api/characters";
+const API_BASE_URL = "https://trpg-backend-production-fb60.up.railway.app/api/characters";
 // 本地开发用
-const API_BASE_URL = "http://localhost:8000/api/characters";
+//const API_BASE_URL = "http://localhost:8000/api/characters";
 
 /**
  * 获取用户保存的所有角色列表

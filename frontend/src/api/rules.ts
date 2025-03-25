@@ -1,8 +1,8 @@
 // frontend/src/api/rules.ts
 import axios from "axios";
 
-//const API_BASE_URL = "https://trpg-backend-production-fb60.up.railway.app/api/rules";
-const API_BASE_URL = "http://127.0.0.1:8000/api/rules";
+const API_BASE_URL = "https://trpg-backend-production-fb60.up.railway.app/api/rules";
+//const API_BASE_URL = "http://127.0.0.1:8000/api/rules";
 
 export interface RuleBook {
   filename: string;
