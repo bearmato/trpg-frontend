@@ -143,7 +143,7 @@ const RulesPage: React.FC = () => {
 
                 <div className="p-6">
                   <h3 className="font-bold text-gray-700 text-lg mb-2">
-                    详细描述
+                    Detailed Description
                   </h3>
                   <p className="text-gray-600 mb-6">
                     {selectedBook.description}
@@ -177,7 +177,7 @@ const RulesPage: React.FC = () => {
                             d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                           />
                         </svg>
-                        在新标签页中查看
+                        View in New Tab
                       </button>
 
                       <a
