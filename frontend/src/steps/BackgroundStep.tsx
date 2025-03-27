@@ -266,11 +266,14 @@ const BackgroundStep: React.FC<BackgroundStepProps> = ({
 
               <button
                 className={`btn btn-primary w-full ${
-                  isLoading ? "loading" : ""
+                  isLoading ? "btn-disabled animate-pulse" : ""
                 }`}
                 onClick={handleGenerateBackground}
                 disabled={isLoading}
               >
+                {isLoading && (
+                  <span className="loading loading-spinner loading-sm"></span>
+                )}
                 {isLoading ? "Generating..." : "Generate Background Story"}
               </button>
 

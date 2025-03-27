@@ -319,27 +319,16 @@ const CharacterCreationPage: React.FC = () => {
           </button>
         ) : (
           <button
-            className={`btn btn-primary ml-auto ${isLoading ? "loading" : ""}`}
+            className={`btn btn-primary ml-auto ${
+              isLoading ? "btn-disabled animate-pulse" : ""
+            }`}
             onClick={saveCharacter}
             disabled={isLoading}
           >
-            {isLoading ? "Saving..." : "Save Character"}
-            {!isLoading && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 ml-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
+            {isLoading && (
+              <span className="loading loading-spinner loading-sm"></span>
             )}
+            {isLoading ? "Saving..." : "Save Character"}
           </button>
         )}
       </div>

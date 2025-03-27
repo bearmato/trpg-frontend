@@ -40,11 +40,14 @@ const ChatInput: React.FC<ChatInputProps> = ({
         />
         <button
           className={`btn btn-primary rounded-full ${
-            isLoading ? "loading" : ""
+            isLoading ? "btn-disabled animate-pulse" : ""
           }`}
           onClick={handleSend}
           disabled={isLoading || !input.trim() || disabled}
         >
+          {isLoading && (
+            <span className="loading loading-spinner loading-sm"></span>
+          )}
           Send
         </button>
       </div>

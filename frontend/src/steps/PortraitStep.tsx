@@ -370,10 +370,15 @@ const PortraitStep: React.FC<PortraitStepProps> = ({
             </div>
 
             <button
-              className={`btn btn-primary w-full ${isLoading ? "loading" : ""}`}
+              className={`btn btn-primary w-full ${
+                isLoading ? "btn-disabled animate-pulse" : ""
+              }`}
               onClick={handleGeneratePortrait}
               disabled={isLoading}
             >
+              {isLoading && (
+                <span className="loading loading-spinner loading-sm"></span>
+              )}
               {isLoading ? "Generating..." : "Generate Portrait"}
             </button>
 

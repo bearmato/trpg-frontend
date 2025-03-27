@@ -137,10 +137,15 @@ const RegisterPage: React.FC = () => {
 
           <button
             type="submit"
-            className={`btn btn-primary w-full ${isLoading ? "loading" : ""}`}
+            className={`btn btn-primary w-full ${
+              isLoading ? "btn-disabled animate-pulse" : ""
+            }`}
             disabled={isLoading}
           >
-            {isLoading ? "注册中..." : "注册"}
+            {isLoading && (
+              <span className="loading loading-spinner loading-sm"></span>
+            )}
+            {isLoading ? "Registering..." : "Register"}
           </button>
         </form>
 

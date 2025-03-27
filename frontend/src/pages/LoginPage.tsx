@@ -85,10 +85,15 @@ const LoginPage: React.FC = () => {
 
           <button
             type="submit"
-            className={`btn btn-primary w-full ${isLoading ? "loading" : ""}`}
+            className={`btn btn-primary w-full ${
+              isLoading ? "btn-disabled animate-pulse" : ""
+            }`}
             disabled={isLoading}
           >
-            {isLoading ? "Logging in…" : "Login"}
+            {isLoading && (
+              <span className="loading loading-spinner loading-sm"></span>
+            )}
+            {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
 
