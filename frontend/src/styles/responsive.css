@@ -1,0 +1,97 @@
+/* 基础响应式设计配置 */
+
+/* 设置根元素字体大小，便于使用rem单位 */
+:root {
+  font-size: 16px;
+}
+
+/* 移动设备 - 小于768px */
+@media screen and (max-width: 767px) {
+  :root {
+    font-size: 14px;
+  }
+}
+
+/* 平板设备 - 768px到1024px */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  :root {
+    font-size: 15px;
+  }
+}
+
+/* 大屏设备 - 大于1024px */
+@media screen and (min-width: 1025px) {
+  :root {
+    font-size: 16px;
+  }
+}
+
+/* 通用响应式类 */
+.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+@media screen and (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+/* 响应式工具类 */
+.hide-on-mobile {
+  @media screen and (max-width: 767px) {
+    display: none !important;
+  }
+}
+
+.hide-on-tablet {
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+    display: none !important;
+  }
+}
+
+.hide-on-desktop {
+  @media screen and (min-width: 1025px) {
+    display: none !important;
+  }
+}
+
+/* 响应式间距 */
+.responsive-spacing {
+  padding: 2rem;
+}
+
+@media screen and (max-width: 767px) {
+  .responsive-spacing {
+    padding: 1rem;
+  }
+}
+
+/* 响应式网格系统 */
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+} 

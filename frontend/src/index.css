@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @plugin "daisyui";
+@import './styles/responsive.css';
 
 @plugin "daisyui/theme" {
   name: "dnd";
