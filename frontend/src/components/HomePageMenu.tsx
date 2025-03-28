@@ -2,26 +2,35 @@ import { Link } from "react-router-dom";
 
 const HomePageMenu = () => {
   return (
-    <ul className="menu menu-horizontal bg-[A31D1D] text-[#F8F2DE]">
-      <li>
-        <Link to="/rules">Rules</Link>
-      </li>
-      <li>
-        <Link to="/ai-gm">AI GM</Link>
-      </li>
-      <li>
-        <Link to="/character-library">Character Library</Link>
-      </li>
-      <li>
-        <Link to="/character-creation">Create Character</Link>
-      </li>
-      <li>
-        <Link to="/map-generator">Map Generator</Link>
-      </li>
-      <li>
-        <Link to="/dice">Dice</Link>
-      </li>
-    </ul>
+    <div className="flex flex-col lg:flex-row">
+      <Link to="/rules" className="btn btn-ghost text-[#F8F2DE] lg:inline-flex">
+        Rules
+      </Link>
+      <Link to="/ai-gm" className="btn btn-ghost text-[#F8F2DE] lg:inline-flex">
+        AI GM
+      </Link>
+      <Link
+        to="/character-library"
+        className="btn btn-ghost text-[#F8F2DE] lg:inline-flex"
+      >
+        Character Library
+      </Link>
+      <Link
+        to="/character-creation"
+        className="btn btn-ghost text-[#F8F2DE] lg:inline-flex"
+      >
+        Create Character
+      </Link>
+      <Link
+        to="/map-generator"
+        className="btn btn-ghost text-[#F8F2DE] lg:inline-flex"
+      >
+        Map Generator
+      </Link>
+      <Link to="/dice" className="btn btn-ghost text-[#F8F2DE] lg:inline-flex">
+        Dice
+      </Link>
+    </div>
   );
 };
 
