@@ -50,9 +50,9 @@ const AvatarUploader: React.FC<AvatarUploaderProps> = ({
 
       const token = localStorage.getItem("token");
 
-      // 修改请求配置
+      // 修改请求路径以匹配后端路径
       const response = await axios.post(
-        `${API_BASE_URL}/api/auth/avatar/upload/`,
+        `${API_BASE_URL}/api/auth/upload-avatar/`, // 修改这里的路径
         formData,
         {
           headers: {
@@ -69,6 +69,13 @@ const AvatarUploader: React.FC<AvatarUploaderProps> = ({
       // Call the callback with the new avatar URL
       if (response.data && response.data.avatar_url) {
         onAvatarChange(response.data.avatar_url);
+      } else if (
+        response.data &&
+        response.data.profile &&
+        response.data.profile.avatar
+      ) {
+        // 兼容处理不同的返回格式
+        onAvatarChange(response.data.profile.avatar);
       }
     } catch (error) {
       console.error("Avatar upload failed:", error);
@@ -109,6 +116,7 @@ const AvatarUploader: React.FC<AvatarUploaderProps> = ({
       setIsUploading(true);
       const token = localStorage.getItem("token");
 
+      // 修改路径以匹配后端实际路径
       await axios.post(
         `${API_BASE_URL}/api/auth/avatar/remove/`,
         {},
@@ -116,7 +124,7 @@ const AvatarUploader: React.FC<AvatarUploaderProps> = ({
           headers: {
             Authorization: `Token ${token}`,
           },
-          withCredentials: true, // 添加这行
+          withCredentials: true,
         }
       );
 
