@@ -8,11 +8,15 @@ import KeywordInput from "../components/KeywordInput";
 interface BackgroundStepProps {
   character: Character;
   updateCharacter: (key: keyof Character, value: any) => void;
+  nextStep: () => void; // Add the nextStep prop
+  prevStep: () => void; // Add the prevStep prop for consistency
 }
 
 const BackgroundStep: React.FC<BackgroundStepProps> = ({
   character,
   updateCharacter,
+  nextStep,
+  prevStep,
 }) => {
   // AI Generation States
   const [keywords, setKeywords] = useState<string[]>([]);
@@ -21,6 +25,9 @@ const BackgroundStep: React.FC<BackgroundStepProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  // Dialog state
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   const tones = [
     "balanced",
@@ -143,6 +150,28 @@ const BackgroundStep: React.FC<BackgroundStepProps> = ({
       );
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Handle next step with confirmation if needed
+  const handleNextStep = () => {
+    // If there's no background story, show confirmation dialog
+    if (
+      !character.background_story ||
+      character.background_story.trim() === ""
+    ) {
+      setShowConfirmDialog(true);
+    } else {
+      // If there is a background story, proceed to next step
+      nextStep();
+    }
+  };
+
+  // Handle confirmation dialog response
+  const handleConfirmation = (confirmed: boolean) => {
+    setShowConfirmDialog(false);
+    if (confirmed) {
+      nextStep();
     }
   };
 
@@ -338,7 +367,78 @@ const BackgroundStep: React.FC<BackgroundStepProps> = ({
             )}
           </div>
         </div>
+
+        {/* Navigation buttons - Now we use handleNextStep instead of directly calling nextStep */}
+        <div className="flex justify-between mt-8">
+          <button className="btn btn-outline" onClick={prevStep}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+            Previous
+          </button>
+
+          <button
+            className="btn btn-primary"
+            onClick={handleNextStep}
+            disabled={!character.background || !character.alignment}
+          >
+            Next
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 ml-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
+
+      {/* Confirmation Dialog */}
+      {showConfirmDialog && (
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-base-100 p-6 rounded-lg shadow-xl max-w-md w-full">
+            <h3 className="font-bold text-lg mb-4">Confirm</h3>
+            <p className="mb-6">
+              You haven't generated a background story for your character.
+              Having a background story helps make your character more
+              well-rounded. Do you want to continue without one?
+            </p>
+            <div className="flex justify-end gap-3">
+              <button
+                className="btn btn-outline"
+                onClick={() => handleConfirmation(false)}
+              >
+                Stay here
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={() => handleConfirmation(true)}
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

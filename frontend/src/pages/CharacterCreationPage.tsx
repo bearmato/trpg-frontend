@@ -220,6 +220,8 @@ const CharacterCreationPage: React.FC = () => {
           <BackgroundStep
             character={character}
             updateCharacter={updateCharacter}
+            nextStep={nextStep}
+            prevStep={prevStep}
           />
         );
       case 5:
@@ -273,65 +275,67 @@ const CharacterCreationPage: React.FC = () => {
       {/* 步骤内容 */}
       {renderStep()}
 
-      {/* 导航按钮 */}
-      <div className="flex justify-between mt-8">
-        {currentStep > 1 && (
-          <button className="btn btn-outline" onClick={prevStep}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Previous
-          </button>
-        )}
+      {/* 导航按钮 - 只在非背景步骤显示，因为背景步骤有自己的导航按钮 */}
+      {currentStep !== 4 && (
+        <div className="flex justify-between mt-8">
+          {currentStep > 1 && (
+            <button className="btn btn-outline" onClick={prevStep}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              Previous
+            </button>
+          )}
 
-        {currentStep < getTotalSteps() ? (
-          <button
-            className="btn btn-primary ml-auto"
-            onClick={nextStep}
-            disabled={!isStepComplete()}
-          >
-            Next
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 ml-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+          {currentStep < getTotalSteps() ? (
+            <button
+              className="btn btn-primary ml-auto"
+              onClick={nextStep}
+              disabled={!isStepComplete()}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
-        ) : (
-          <button
-            className={`btn btn-primary ml-auto ${
-              isLoading ? "btn-disabled animate-pulse" : ""
-            }`}
-            onClick={saveCharacter}
-            disabled={isLoading}
-          >
-            {isLoading && (
-              <span className="loading loading-spinner loading-sm"></span>
-            )}
-            {isLoading ? "Saving..." : "Save Character"}
-          </button>
-        )}
-      </div>
+              Next
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 ml-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          ) : (
+            <button
+              className={`btn btn-primary ml-auto ${
+                isLoading ? "btn-disabled animate-pulse" : ""
+              }`}
+              onClick={saveCharacter}
+              disabled={isLoading}
+            >
+              {isLoading && (
+                <span className="loading loading-spinner loading-sm"></span>
+              )}
+              {isLoading ? "Saving..." : "Save Character"}
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 };
