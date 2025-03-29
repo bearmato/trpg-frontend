@@ -1,6 +1,6 @@
 // steps/PortraitStep.tsx
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Character } from "../types/character";
 import { generateCharacterPortrait } from "../api/aigm";
 import KeywordInput from "../components/KeywordInput";
@@ -21,6 +21,7 @@ const PortraitStep: React.FC<PortraitStepProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [generationInfo, setGenerationInfo] = useState<string | null>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   // Predefined options
   const styles = [
@@ -278,13 +279,20 @@ const PortraitStep: React.FC<PortraitStepProps> = ({
       });
 
       console.log("Portrait generation response:", response);
-      // Update character portrait URL using snake_case
+
+      // 更新角色肖像URL
       updateCharacter("portrait_url", response.image_url);
 
-      // Show generation info
+      // 保存Cloudinary public_id（如果有）
+      if (response.public_id) {
+        updateCharacter("portrait_public_id", response.public_id);
+        console.log("已保存Cloudinary public_id:", response.public_id);
+      }
+
+      // 显示生成信息
       setGenerationInfo("Portrait generated successfully!");
 
-      // Scroll to portrait area
+      // 滚动到肖像区域
       setTimeout(() => {
         const portraitElement = document.getElementById("character-portrait");
         if (portraitElement) {
@@ -294,9 +302,7 @@ const PortraitStep: React.FC<PortraitStepProps> = ({
     } catch (err) {
       console.error("Error generating portrait:", err);
       setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to generate character portrait"
+        err instanceof Error ? err.message : "Failed to generate portrait"
       );
     } finally {
       setIsLoading(false);
@@ -321,7 +327,11 @@ const PortraitStep: React.FC<PortraitStepProps> = ({
               >
                 {genders.map((g) => (
                   <option key={g} value={g}>
-                    {g.charAt(0).toUpperCase() + g.slice(1)}
+                    {g === "male"
+                      ? "Male"
+                      : g === "female"
+                      ? "Female"
+                      : "Non-binary"}
                   </option>
                 ))}
               </select>
@@ -338,12 +348,21 @@ const PortraitStep: React.FC<PortraitStepProps> = ({
               >
                 {styles.map((s) => (
                   <option key={s} value={s}>
-                    {s
-                      .split(" ")
-                      .map(
-                        (word) => word.charAt(0).toUpperCase() + word.slice(1)
-                      )
-                      .join(" ")}
+                    {s === "fantasy"
+                      ? "Fantasy"
+                      : s === "realistic"
+                      ? "Realistic"
+                      : s === "anime"
+                      ? "Anime"
+                      : s === "comic"
+                      ? "Comic"
+                      : s === "watercolor"
+                      ? "Watercolor"
+                      : s === "oil painting"
+                      ? "Oil Painting"
+                      : s === "pixel art"
+                      ? "Pixel Art"
+                      : s}
                   </option>
                 ))}
               </select>
@@ -431,6 +450,7 @@ const PortraitStep: React.FC<PortraitStepProps> = ({
             {character.portrait_url ? (
               <div className="aspect-square rounded-lg overflow-hidden">
                 <img
+                  ref={imgRef}
                   src={character.portrait_url}
                   alt="Character Portrait"
                   className="w-full h-full object-cover"

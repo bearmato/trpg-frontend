@@ -26,6 +26,7 @@ export interface Character {
   gender: string;
   features: string[];
   portrait_url: string;
+  portrait_public_id?: string; // Cloudinary public_id，用于未来删除操作
   stats: CharacterStats;
   skill_proficiencies: string[];
   equipment: string[];

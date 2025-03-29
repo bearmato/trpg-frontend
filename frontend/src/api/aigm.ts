@@ -66,6 +66,7 @@ export const generateCharacterBackground = async (options: BackgroundOptions) =>
     throw new Error("Cannot connect to AI GM service");
   }
 };
+
 /**
  * Character portrait generator options
  */
@@ -86,15 +87,32 @@ export interface PortraitOptions {
  */
 export const generateCharacterPortrait = async (options: PortraitOptions) => {
   try {
+    // 构建API请求数据
+    const requestData = {
+      name: options.name,
+      race: options.race,
+      subrace: options.subrace,
+      class: options.class, 
+      gender: options.gender,
+      style: options.style,
+      features: options.features,
+      should_save: true // 始终自动保存
+    };
+    
     const response = await axios.post(
       `${API_BASE_URL}/character-portrait/`, 
-      options
+      requestData
     );
     
     // 确保返回的图片 URL 是完整的
     const image_url = response.data.image_url;
     if (image_url && !image_url.startsWith('http')) {
       response.data.image_url = `${API_BASE_URL}${image_url}`;
+    }
+    
+    // 确保返回public_id（如果后端提供）
+    if (!response.data.public_id && response.data.cloudinary_public_id) {
+      response.data.public_id = response.data.cloudinary_public_id;
     }
     
     return response.data;

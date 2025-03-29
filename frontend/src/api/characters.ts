@@ -71,7 +71,8 @@ export const saveCharacter = async (character: Character): Promise<Character> =>
       ideal: character.ideal,
       bond: character.bond,
       flaw: character.flaw,
-      portrait_url: character.portrait_url
+      portrait_url: character.portrait_url,
+      portrait_public_id: character.portrait_public_id
     });
 
     const axiosInstance = createAxiosInstance(token);
@@ -100,7 +101,8 @@ export const saveCharacter = async (character: Character): Promise<Character> =>
       ideal: character.ideal,
       bond: character.bond,
       flaw: character.flaw,
-      portrait_url: character.portrait_url
+      portrait_url: character.portrait_url,
+      portrait_public_id: character.portrait_public_id
     });
 
     console.log("服务器响应:", response.data);
