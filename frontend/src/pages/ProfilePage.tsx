@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { getUserProfile, updateUserProfile, Profile } from "../api/auth";
 import { useNavigate } from "react-router-dom";
+import AvatarUploader from "../components/AvatarUploader";
 
 const ProfilePage: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
@@ -57,6 +58,21 @@ const ProfilePage: React.FC = () => {
     }
   };
 
+  const handleAvatarChange = (newAvatarUrl: string) => {
+    setAvatar(newAvatarUrl);
+    // 如果用户不在编辑模式，自动提交更改
+    if (!isEditing) {
+      updateUserProfile({ avatar: newAvatarUrl })
+        .then((updatedProfile) => {
+          setProfile(updatedProfile);
+          setError(null);
+        })
+        .catch((err) => {
+          setError(err instanceof Error ? err.message : "更新头像失败");
+        });
+    }
+  };
+
   const handleLogout = async () => {
     await logout();
     navigate("/login");
@@ -96,37 +112,17 @@ const ProfilePage: React.FC = () => {
 
         {profile && (
           <div className="flex flex-col items-center">
-            <div className="avatar mb-6">
-              <div className="w-24 rounded-full overflow-hidden ring ring-primary ring-offset-base-100 ring-offset-2">
-                <img
-                  src={profile?.avatar || "/images/avatars/default-avatar.png"}
-                  alt={profile?.username || "User profile"}
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = "/images/avatars/default-avatar.png";
-                  }}
-                />
-              </div>
-            </div>
+            {/* Avatar uploader component */}
+            <AvatarUploader
+              currentAvatar={profile.avatar || null}
+              onAvatarChange={handleAvatarChange}
+            />
 
-            <h2 className="text-2xl font-bold mb-2">{profile.username}</h2>
+            <h2 className="text-2xl font-bold mt-6 mb-2">{profile.username}</h2>
             <p className="text-base-content/70 mb-6">{profile.email}</p>
 
             {isEditing ? (
               <form onSubmit={handleSubmit} className="w-full max-w-md">
-                <div className="form-control mb-4">
-                  <label className="label">
-                    <span className="label-text">头像URL</span>
-                  </label>
-                  <input
-                    type="url"
-                    className="input input-bordered w-full"
-                    value={avatar}
-                    onChange={(e) => setAvatar(e.target.value)}
-                    placeholder="/images/avatars/default-avatar.png"
-                  />
-                </div>
-
                 <div className="form-control mb-6">
                   <label className="label">
                     <span className="label-text">个人简介</span>
