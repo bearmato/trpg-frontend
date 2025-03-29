@@ -4,10 +4,59 @@ import NavBarTitle from "./NavBarTitle";
 import DiceToggleButton from "./DiceToggleButton";
 import { useDiceWidget } from "./DiceWidgetProvider";
 import { useAuth } from "../contexts/AuthContext";
+import { useState, useEffect } from "react";
 
 const NavBar = () => {
   const { toggleDiceWidget, isDiceWidgetVisible } = useDiceWidget();
   const { user, isAuthenticated, logout } = useAuth();
+  const [avatarKey, setAvatarKey] = useState(Date.now());
+
+  // 当用户信息变化时强制刷新头像
+  useEffect(() => {
+    if (user) {
+      console.log("NavBar: 用户信息变化，准备刷新头像");
+
+      // 检查localStorage中的用户信息是否与当前state一致
+      try {
+        const storedUserStr = localStorage.getItem("user");
+        if (storedUserStr) {
+          const storedUser = JSON.parse(storedUserStr);
+          console.log("NavBar: localStorage中的用户头像:", storedUser.avatar);
+          console.log("NavBar: 当前状态中的用户头像:", user.avatar);
+
+          // 如果localStorage中有头像但状态中没有，更新状态
+          if (storedUser.avatar && (!user.avatar || user.avatar === "")) {
+            console.log("NavBar: 从localStorage更新头像");
+            // 这里不直接修改user，因为user是只读的，应该通过context提供的方法修改
+          }
+        }
+      } catch (error) {
+        console.error("NavBar: 检查localStorage时出错:", error);
+      }
+
+      // 刷新头像
+      setAvatarKey(Date.now());
+    }
+  }, [user]);
+
+  // 获取头像URL并添加时间戳防止缓存
+  const getAvatarUrl = () => {
+    // 如果没有用户头像，使用默认头像
+    if (!user?.avatar || user.avatar === "") {
+      return "/images/avatars/default-avatar.png";
+    }
+
+    // 检查是否是Cloudinary URL
+    if (user.avatar.includes("cloudinary.com")) {
+      // 对于Cloudinary URL，直接使用原始URL
+      return user.avatar;
+    }
+
+    // 非Cloudinary URL添加时间戳参数防止缓存
+    const timestamp = Date.now();
+    const separator = user.avatar.includes("?") ? "&" : "?";
+    return `${user.avatar}${separator}t=${timestamp}`;
+  };
 
   const handleLogout = () => {
     logout();
@@ -15,17 +64,17 @@ const NavBar = () => {
 
   return (
     <div className="bg-[#A31D1D]">
-      <div className="navbar w-full lg:w-[95%] max-w-[1920px] mx-auto px-4 py-2">
+      <div className="navbar w-full lg:w-[98%] max-w-[1920px] mx-auto px-2 py-2">
         {/* Logo区域和移动端菜单 */}
-        <div className="navbar-start flex items-center gap-4">
+        <div className="navbar-start flex items-center gap-2">
           {/* 移动端菜单按钮 */}
           <div className="dropdown lg:hidden">
-            <div tabIndex={0} role="button" className="btn btn-ghost">
+            <div tabIndex={0} role="button" className="btn btn-ghost btn-sm">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                className="inline-block w-6 h-6 stroke-current text-[#F8F2DE]"
+                className="inline-block w-5 h-5 stroke-current text-[#F8F2DE]"
               >
                 <path
                   strokeLinecap="round"
@@ -51,7 +100,7 @@ const NavBar = () => {
         </div>
 
         {/* 右侧功能区 */}
-        <div className="navbar-end flex items-center gap-2">
+        <div className="navbar-end flex items-center gap-1">
           <DiceToggleButton
             toggleDiceWidget={toggleDiceWidget}
             isDiceWidgetVisible={isDiceWidgetVisible}
@@ -64,10 +113,11 @@ const NavBar = () => {
                 role="button"
                 className="btn btn-ghost btn-circle avatar"
               >
-                <div className="w-8 lg:w-10 rounded-full overflow-hidden">
+                <div className="w-7 lg:w-9 rounded-full overflow-hidden">
                   <img
                     alt="Avatar"
-                    src={user?.avatar || "/images/avatars/default-avatar.png"}
+                    key={avatarKey} // 使用key强制重新渲染
+                    src={getAvatarUrl()}
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.src = "/images/avatars/default-avatar.png";
@@ -81,21 +131,19 @@ const NavBar = () => {
               >
                 <li>
                   <Link to="/profile" className="justify-between">
-                    Personal Profile
+                    个人资料
                     <span className="badge">{user?.username}</span>
                   </Link>
                 </li>
+
                 <li>
-                  <a>Settings</a>
-                </li>
-                <li>
-                  <a onClick={handleLogout}>Log Out</a>
+                  <a onClick={handleLogout}>退出登录</a>
                 </li>
               </ul>
             </div>
           ) : (
             <Link to="/login" className="btn btn-ghost text-[#F8F2DE]">
-              Login
+              登录
             </Link>
           )}
         </div>

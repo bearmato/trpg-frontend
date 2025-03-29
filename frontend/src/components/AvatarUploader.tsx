@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
+import { useAuth } from "../contexts/AuthContext";
 
 interface AvatarUploaderProps {
   currentAvatar: string | null;
@@ -16,6 +17,7 @@ const AvatarUploader: React.FC<AvatarUploaderProps> = ({
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(currentAvatar);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { updateUser } = useAuth(); // 从AuthContext获取updateUser方法
 
   // 修正 API URL 地址
   const API_BASE_URL = "https://trpg-backend-production-fb60.up.railway.app";
@@ -50,35 +52,60 @@ const AvatarUploader: React.FC<AvatarUploaderProps> = ({
 
       const token = localStorage.getItem("token");
 
-      // 修改请求路径以匹配后端路径
+      // 上传头像
       const response = await axios.post(
-        `${API_BASE_URL}/api/auth/upload-avatar/`, // 修改这里的路径
+        `${API_BASE_URL}/api/auth/upload-avatar/`,
         formData,
         {
           headers: {
             Authorization: `Token ${token}`,
             "Content-Type": "multipart/form-data",
           },
-          // 添加 withCredentials 配置
           withCredentials: true,
         }
       );
 
-      console.log("Upload response:", response.data);
-
-      // Call the callback with the new avatar URL
+      // 提取头像URL
+      let avatarUrl = "";
       if (response.data && response.data.avatar_url) {
-        onAvatarChange(response.data.avatar_url);
+        avatarUrl = response.data.avatar_url;
       } else if (
         response.data &&
         response.data.profile &&
         response.data.profile.avatar
       ) {
-        // 兼容处理不同的返回格式
-        onAvatarChange(response.data.profile.avatar);
+        avatarUrl = response.data.profile.avatar;
+      } else if (response.data && response.data.avatar) {
+        avatarUrl = response.data.avatar;
+      }
+
+      // 尝试从响应中解析URL
+      if (!avatarUrl) {
+        const responseStr = JSON.stringify(response.data);
+        const urlMatch = responseStr.match(
+          /(https?:\/\/[^"']+\.(jpg|jpeg|png|gif))/i
+        );
+        if (urlMatch && urlMatch[0]) {
+          avatarUrl = urlMatch[0];
+        }
+      }
+
+      if (avatarUrl) {
+        // 更新全局用户状态
+        updateUser({ avatar: avatarUrl });
+
+        // 更新当前组件状态
+        onAvatarChange(avatarUrl);
+
+        // 刷新页面
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      } else {
+        setUploadError("上传成功但无法获取头像URL");
       }
     } catch (error) {
-      console.error("Avatar upload failed:", error);
+      console.error("AvatarUploader: 头像上传失败:", error);
       // 改进错误提示
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 401) {
@@ -110,42 +137,6 @@ const AvatarUploader: React.FC<AvatarUploaderProps> = ({
     setPreviewUrl(null);
   };
 
-  // Function to remove avatar and set to default
-  const removeAvatar = async () => {
-    try {
-      setIsUploading(true);
-      const token = localStorage.getItem("token");
-
-      // 修改路径以匹配后端实际路径
-      await axios.post(
-        `${API_BASE_URL}/api/auth/avatar/remove/`,
-        {},
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-          withCredentials: true,
-        }
-      );
-
-      // Update state and call callback
-      setPreviewUrl(null);
-      onAvatarChange("");
-    } catch (error) {
-      // 改进错误处理
-      console.error("Failed to remove avatar:", error);
-      if (axios.isAxiosError(error)) {
-        setUploadError(
-          `删除头像失败: ${error.response?.data?.message || error.message}`
-        );
-      } else {
-        setUploadError("删除头像失败，请稍后重试");
-      }
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
   return (
     <div className="flex flex-col items-center space-y-4">
       {/* Avatar preview */}
@@ -168,27 +159,6 @@ const AvatarUploader: React.FC<AvatarUploaderProps> = ({
           ) : (
             <div className="text-4xl opacity-30">👤</div>
           )}
-
-          {/* Overlay with upload icon on hover */}
-          <div
-            className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-            onClick={triggerFileInput}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-10 w-10 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
-              />
-            </svg>
-          </div>
         </div>
       </div>
 
@@ -209,17 +179,6 @@ const AvatarUploader: React.FC<AvatarUploaderProps> = ({
             "Change Avatar"
           )}
         </button>
-
-        {previewUrl && (
-          <button
-            type="button"
-            className="btn btn-outline btn-error btn-sm"
-            onClick={removeAvatar}
-            disabled={isUploading}
-          >
-            Remove
-          </button>
-        )}
       </div>
 
       {/* Hidden file input */}

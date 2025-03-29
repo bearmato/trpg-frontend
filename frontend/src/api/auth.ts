@@ -68,9 +68,34 @@ export const registerUser = async (userData: RegisterData): Promise<AuthResponse
 export const loginUser = async (credentials: LoginCredentials): Promise<AuthResponse> => {
   try {
     const response = await axios.post(`${API_BASE_URL}/api/auth/login/`, credentials);
+    
     // 保存令牌到localStorage
     localStorage.setItem("token", response.data.token);
+    
+    // 登录后立即获取完整的用户资料，确保包含头像
+    try {
+      // 获取用户资料
+      const profileResponse = await axios.get(
+        `${API_BASE_URL}/api/auth/profile/`,
+        {
+          headers: {
+            Authorization: `Token ${response.data.token}`,
+          },
+        }
+      );
+      
+      // 合并用户信息和资料信息
+      if (profileResponse.data && profileResponse.data.avatar) {
+        response.data.user.avatar = profileResponse.data.avatar;
+        console.log("登录后获取到的头像:", profileResponse.data.avatar);
+      }
+    } catch (profileError) {
+      console.error("登录后获取用户资料失败:", profileError);
+    }
+    
+    // 保存完整的用户信息到localStorage
     localStorage.setItem("user", JSON.stringify(response.data.user));
+    
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
@@ -115,6 +140,25 @@ export const getCurrentUser = async (): Promise<User | null> => {
         Authorization: `Token ${token}`,
       },
     });
+    
+    // 检查响应中是否有avatar属性
+    if (response.data && !('avatar' in response.data)) {
+      // 如果没有avatar，尝试获取用户资料信息
+      try {
+        const profileResponse = await axios.get(`${API_BASE_URL}/api/auth/profile/`, {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
+        
+        // 如果资料中有avatar，合并到用户对象
+        if (profileResponse.data && profileResponse.data.avatar) {
+          response.data.avatar = profileResponse.data.avatar;
+        }
+      } catch (profileErr) {
+        console.error("获取用户资料失败:", profileErr);
+      }
+    }
 
     return response.data;
   } catch (error) {
@@ -123,6 +167,7 @@ export const getCurrentUser = async (): Promise<User | null> => {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
     }
+    console.error("获取当前用户信息失败:", error);
     return null;
   }
 };
