@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import diceIcon from "../assets/dice-icon.svg"; // 使用自定义的骰子图标组件
+import diceIcon from "../assets/dice-icon.svg";
 
 interface DraggableDiceButtonProps {
   toggleDrawer: () => void;
@@ -9,10 +9,14 @@ const DraggableDiceButton = ({ toggleDrawer }: DraggableDiceButtonProps) => {
   const [position, setPosition] = useState({
     x: window.innerWidth - 100,
     y: window.innerHeight - 100,
-  }); // 初始位置
+  });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const buttonRef = useRef<HTMLDivElement>(null);
+  // 添加一个引用来跟踪是否真正发生了拖动
+  const hasMoved = useRef<boolean>(false);
+  // 记录鼠标按下时的初始位置
+  const initialPosition = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
   // 处理鼠标按下事件
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -22,6 +26,10 @@ const DraggableDiceButton = ({ toggleDrawer }: DraggableDiceButtonProps) => {
         x: e.clientX - rect.left,
         y: e.clientY - rect.top,
       });
+      // 重置拖动状态
+      hasMoved.current = false;
+      // 记录初始位置
+      initialPosition.current = { x: e.clientX, y: e.clientY };
       setIsDragging(true);
     }
   };
@@ -29,6 +37,15 @@ const DraggableDiceButton = ({ toggleDrawer }: DraggableDiceButtonProps) => {
   // 处理鼠标移动事件
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging) {
+      // 计算鼠标移动距离
+      const moveX = Math.abs(e.clientX - initialPosition.current.x);
+      const moveY = Math.abs(e.clientY - initialPosition.current.y);
+
+      // 如果移动超过一定阈值，认为是拖动而非点击
+      if (moveX > 5 || moveY > 5) {
+        hasMoved.current = true;
+      }
+
       // 计算新位置，确保按钮不会超出视口边界
       const newX = Math.min(
         Math.max(0, e.clientX - dragOffset.x),
@@ -74,8 +91,8 @@ const DraggableDiceButton = ({ toggleDrawer }: DraggableDiceButtonProps) => {
       }}
       onMouseDown={handleMouseDown}
       onClick={(e) => {
-        // 只有当不是在拖动结束时才触发点击事件
-        if (!isDragging) {
+        // 只有当没有实际拖动时才打开抽屉
+        if (!hasMoved.current) {
           toggleDrawer();
         }
         e.stopPropagation();
@@ -85,7 +102,7 @@ const DraggableDiceButton = ({ toggleDrawer }: DraggableDiceButtonProps) => {
         src={diceIcon}
         alt="Dice"
         className="w-10 h-10 animate-pulse"
-        style={{ filter: "brightness(0) invert(1)" }} // 使SVG变为白色
+        style={{ filter: "brightness(0) invert(1)" }}
         draggable={false}
       />
     </div>

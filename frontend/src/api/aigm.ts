@@ -43,7 +43,7 @@ export interface BackgroundOptions {
   alignment: string;
   keywords: string[];
   tone: string;
-  language: string; // 新增：语言选择参数
+  language: string; //language choice
 }
 
 /**
@@ -73,7 +73,7 @@ export const generateCharacterBackground = async (options: BackgroundOptions) =>
 export interface PortraitOptions {
   name: string;
   race: string;
-  subrace?: string;  // 添加亚种信息
+  subrace?: string;  //subrace information
   class: string;
   gender: string;
   style: string;
