@@ -131,19 +131,19 @@ const NavBar = () => {
               >
                 <li>
                   <Link to="/profile" className="justify-between">
-                    个人资料
+                    Profile
                     <span className="badge">{user?.username}</span>
                   </Link>
                 </li>
 
                 <li>
-                  <a onClick={handleLogout}>退出登录</a>
+                  <a onClick={handleLogout}>Logout</a>
                 </li>
               </ul>
             </div>
           ) : (
             <Link to="/login" className="btn btn-ghost text-[#F8F2DE]">
-              登录
+              Login
             </Link>
           )}
         </div>

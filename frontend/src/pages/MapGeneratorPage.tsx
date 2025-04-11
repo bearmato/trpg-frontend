@@ -720,14 +720,14 @@ const MapGeneratorPage: React.FC = () => {
     <div className="container mx-auto p-4">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold mb-6 text-primary">
-          随机地下城地图生成器
+          Random Dungeon Map Generator
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Control panel */}
           <div className="md:col-span-1 bg-base-200 p-6 rounded-lg shadow-sm">
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">种子值</label>
+              <label className="block text-sm font-medium mb-1">Seed</label>
               <div className="flex gap-2">
                 <input
                   type="number"
@@ -740,7 +740,7 @@ const MapGeneratorPage: React.FC = () => {
                   type="button"
                   onClick={generateNewSeed}
                   className="btn btn-square"
-                  title="生成新的随机种子"
+                  title="Generate new random seed"
                 >
                   🎲
                 </button>
@@ -748,10 +748,10 @@ const MapGeneratorPage: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">地图尺寸</label>
+              <label className="block text-sm font-medium mb-1">Map Size</label>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-xs opacity-70">行数</label>
+                  <label className="text-xs opacity-70">Rows</label>
                   <input
                     type="number"
                     name="rows"
@@ -763,7 +763,7 @@ const MapGeneratorPage: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-xs opacity-70">列数</label>
+                  <label className="text-xs opacity-70">Columns</label>
                   <input
                     type="number"
                     name="cols"
@@ -778,10 +778,12 @@ const MapGeneratorPage: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">房间尺寸</label>
+              <label className="block text-sm font-medium mb-1">
+                Room Size
+              </label>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="text-xs opacity-70">最小</label>
+                  <label className="text-xs opacity-70">Min</label>
                   <input
                     type="number"
                     name="roomMin"
@@ -793,7 +795,7 @@ const MapGeneratorPage: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label className="text-xs opacity-70">最大</label>
+                  <label className="text-xs opacity-70">Max</label>
                   <input
                     type="number"
                     name="roomMax"
@@ -808,35 +810,39 @@ const MapGeneratorPage: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">房间布局</label>
+              <label className="block text-sm font-medium mb-1">
+                Room Layout
+              </label>
               <select
                 name="roomLayout"
                 value={params.roomLayout}
                 onChange={handleInputChange}
                 className="select select-bordered w-full"
               >
-                <option value="Scattered">分散式</option>
-                <option value="Packed">紧凑式</option>
+                <option value="Scattered">Scattered</option>
+                <option value="Packed">Packed</option>
               </select>
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">走廊布局</label>
+              <label className="block text-sm font-medium mb-1">
+                Corridor Layout
+              </label>
               <select
                 name="corridorLayout"
                 value={params.corridorLayout}
                 onChange={handleInputChange}
                 className="select select-bordered w-full"
               >
-                <option value="Bent">弯曲型</option>
-                <option value="Straight">直线型</option>
-                <option value="Labyrinth">迷宫型</option>
+                <option value="Bent">Bent</option>
+                <option value="Straight">Straight</option>
+                <option value="Labyrinth">Labyrinth</option>
               </select>
             </div>
 
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">
-                移除死胡同(%)
+                Remove Deadends (%)
               </label>
               <input
                 type="range"
@@ -855,7 +861,9 @@ const MapGeneratorPage: React.FC = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">楼梯数量</label>
+              <label className="block text-sm font-medium mb-1">
+                Number of Stairs
+              </label>
               <input
                 type="number"
                 name="addStairs"
@@ -869,7 +877,7 @@ const MapGeneratorPage: React.FC = () => {
 
             <div className="mb-6">
               <label className="block text-sm font-medium mb-1">
-                单元格大小 (像素)
+                Cell Size (pixels)
               </label>
               <input
                 type="number"
@@ -890,17 +898,17 @@ const MapGeneratorPage: React.FC = () => {
               {isGenerating ? (
                 <>
                   <span className="loading loading-spinner loading-sm"></span>
-                  生成中...
+                  Generating...
                 </>
               ) : (
-                "生成地图"
+                "Generate Map"
               )}
             </button>
           </div>
 
           {/* Map display area */}
           <div className="md:col-span-2 bg-base-200 p-6 rounded-lg shadow-sm min-h-[600px] flex flex-col">
-            <h2 className="text-xl font-bold mb-4">地图预览</h2>
+            <h2 className="text-xl font-bold mb-4">Map Preview</h2>
 
             <div className="flex-1 flex flex-col items-center">
               <div className="overflow-auto max-h-[500px] border border-base-300 rounded-lg mb-4 bg-black">
@@ -908,7 +916,7 @@ const MapGeneratorPage: React.FC = () => {
               </div>
               <div className="w-full flex justify-end gap-2">
                 <button onClick={downloadMap} className="btn btn-outline">
-                  下载地图
+                  Download Map
                 </button>
               </div>
             </div>
