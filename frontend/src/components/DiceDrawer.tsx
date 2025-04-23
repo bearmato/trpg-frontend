@@ -25,7 +25,7 @@ const DiceDrawer: React.FC<DiceDrawerProps> = ({ isOpen, onClose }) => {
         <div className="flex flex-col h-full">
           {/* 抽屉头部 - 使用 DaisyUI 样式 */}
           <div className="p-4 border-b flex justify-between items-center bg-primary text-primary-content">
-            <h2 className="text-xl font-bold">🎲 骰子工具</h2>
+            <h2 className="text-xl font-bold">🎲 Dice Roller</h2>
             <button
               onClick={onClose}
               className="btn btn-circle btn-ghost btn-sm"

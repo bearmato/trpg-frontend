@@ -39,71 +39,30 @@ export const getCharacterById = async (id: string): Promise<any> => {
   }
 };
 
-// 在 frontend/src/api/characters.ts 中修改 saveCharacter 函数
-
 export const saveCharacter = async (character: Character): Promise<Character> => {
   try {
     const token = localStorage.getItem("token");
     if (!token) throw new Error("Not authorized");
 
-    console.log("发送到服务器的数据:", {
-      name: character.name,
-      race: character.race,
-      subrace: character.subrace,
-      character_class: character.character_class,
-      subclass: character.subclass,
-      level: character.level,
-      background: character.background,
-      alignment: character.alignment,
-      gender: character.gender,
-      stats: {
-        strength: character.stats.strength,
-        dexterity: character.stats.dexterity,
-        constitution: character.stats.constitution,
-        intelligence: character.stats.intelligence,
-        wisdom: character.stats.wisdom,
-        charisma: character.stats.charisma
-      },
-      skill_proficiencies: character.skill_proficiencies,
-      features: character.features,
-      background_story: character.background_story,
-      personality: character.personality,
-      ideal: character.ideal,
-      bond: character.bond,
-      flaw: character.flaw,
-      portrait_url: character.portrait_url,
-      portrait_public_id: character.portrait_public_id
-    });
+    // 从stats对象中提取属性值
+    const { stats, ...otherDetails } = character;
+    
+    // 创建符合后端API期望的数据结构
+    const characterData = {
+      ...otherDetails,
+      // 直接展开stats对象，使属性值成为顶级字段
+      strength: stats.strength,
+      dexterity: stats.dexterity,
+      constitution: stats.constitution, 
+      intelligence: stats.intelligence,
+      wisdom: stats.wisdom,
+      charisma: stats.charisma
+    };
+
+    console.log("发送到服务器的数据:", characterData);
 
     const axiosInstance = createAxiosInstance(token);
-    const response = await axiosInstance.post('/', {
-      name: character.name,
-      race: character.race,
-      subrace: character.subrace,
-      character_class: character.character_class,
-      subclass: character.subclass,
-      level: character.level,
-      background: character.background,
-      alignment: character.alignment,
-      gender: character.gender,
-      stats: {
-        strength: character.stats.strength,
-        dexterity: character.stats.dexterity,
-        constitution: character.stats.constitution,
-        intelligence: character.stats.intelligence,
-        wisdom: character.stats.wisdom,
-        charisma: character.stats.charisma
-      },
-      skill_proficiencies: character.skill_proficiencies,
-      features: character.features,
-      background_story: character.background_story,
-      personality: character.personality,
-      ideal: character.ideal,
-      bond: character.bond,
-      flaw: character.flaw,
-      portrait_url: character.portrait_url,
-      portrait_public_id: character.portrait_public_id
-    });
+    const response = await axiosInstance.post('/', characterData);
 
     console.log("服务器响应:", response.data);
     return response.data;
@@ -147,33 +106,22 @@ export const updateCharacter = async (id: string, character: Character): Promise
     const token = localStorage.getItem("token");
     if (!token) throw new Error("Not authorized");
 
+    // 从stats对象中提取属性值
+    const { stats, ...otherDetails } = character;
+    
+    // 创建符合后端API期望的数据结构
     const characterData = {
-      name: character.name,
-      race: character.race,
-      subrace: character.subrace,
-      character_class: character.character_class,
-      subclass: character.subclass,
-      level: character.level,
-      background: character.background,
-      alignment: character.alignment,
-      gender: character.gender,
-      stats: {
-        strength: character.stats.strength,
-        dexterity: character.stats.dexterity,
-        constitution: character.stats.constitution,
-        intelligence: character.stats.intelligence,
-        wisdom: character.stats.wisdom,
-        charisma: character.stats.charisma
-      },
-      skill_proficiencies: character.skill_proficiencies,
-      features: character.features,
-      background_story: character.background_story,
-      personality: character.personality,
-      ideal: character.ideal,
-      bond: character.bond,
-      flaw: character.flaw,
-      portrait_url: character.portrait_url
+      ...otherDetails,
+      // 直接展开stats对象，使属性值成为顶级字段
+      strength: stats.strength,
+      dexterity: stats.dexterity,
+      constitution: stats.constitution, 
+      intelligence: stats.intelligence,
+      wisdom: stats.wisdom,
+      charisma: stats.charisma
     };
+
+    console.log("发送到服务器的更新数据:", characterData);
 
     const axiosInstance = createAxiosInstance(token);
     const response = await axiosInstance.put(`/${id}/`, characterData);

@@ -420,10 +420,10 @@ const AbilityScoresStep: React.FC<AbilityScoresStepProps> = ({
         {/* 标准数组说明 */}
         {generationMethod === "standardArray" && (
           <div className="bg-amber-100 p-4 rounded-lg mb-6">
-            <h3 className="font-bold">标准数组</h3>
+            <h3 className="font-bold">Standard Array</h3>
             <p className="text-sm mt-2">
-              使用预设的六个数值来分配你的属性：15, 14, 13, 12, 10,
-              8。每个数值只能使用一次。
+              Use the preset six values to allocate your attributes: 15, 14, 13,
+              12, 10, 8. Each value can only be used once.
             </p>
             <div className="flex flex-wrap gap-2 mt-3">
               {STANDARD_ARRAY.map((value, index) => {
